@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — RDVPrefectureFacile.fr</title>
+  <meta name="description" content="Contactez l'équipe RDVPrefectureFacile. Réponse garantie sous 24h ouvrées. Une vraie personne vous lit.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">RDV<span>Prefecture</span><span class="dot">Facile</span></a>
+      <ul class="navbar-nav">
+        <li><a href="comment-ca-marche.html">Comment ça marche</a></li>
+        <li><a href="prefectures.html">Préfectures</a></li>
+        <li><a href="tarifs.html">Tarifs</a></li>
+        <li><a href="blog/index.html">Blog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="connexion.html" class="btn btn-secondary btn-sm">Se connecter</a>
+        <a href="inscription.html" class="btn btn-primary btn-sm">Créer mon alerte</a>
+      </div>
+      <button class="navbar-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="comment-ca-marche.html">Comment ça marche</a>
+  <a href="prefectures.html">Préfectures</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="blog/index.html">Blog</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="connexion.html" class="btn btn-secondary">Se connecter</a>
+  <a href="inscription.html" class="btn btn-primary">Créer mon alerte</a>
+</div>
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Accueil</a><span>›</span>Contact</div>
+    <h1>Nous sommes là pour vous aider</h1>
+    <p>Notre équipe répond à toutes vos questions sous 24h ouvrées. Pas de bot, pas de réponse générique — une vraie personne vous lit.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- Infos contact -->
+      <div class="contact-info">
+        <div class="contact-info-item">
+          <div class="contact-info-icon">✉️</div>
+          <div>
+            <div class="contact-info-title">Email</div>
+            <div class="contact-info-text">contact@rdvprefecturefacile.fr<br>Réponse sous 24h ouvrées</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">🕐</div>
+          <div>
+            <div class="contact-info-title">Horaires</div>
+            <div class="contact-info-text">Lundi au vendredi<br>9h00 – 18h00</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">💬</div>
+          <div>
+            <div class="contact-info-title">Chat en ligne</div>
+            <div class="contact-info-text">Disponible depuis votre espace client<br>7j/7 pour les abonnés</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">📍</div>
+          <div>
+            <div class="contact-info-title">Siège social</div>
+            <div class="contact-info-text">France<br>SIRET : [à compléter]</div>
+          </div>
+        </div>
+
+        <div class="alert-note" style="margin-top:12px;">
+          <strong>Note importante :</strong> RDVPrefectureFacile est un service privé. Pour toute question relative à votre dossier administratif ou votre rendez-vous, contactez directement votre préfecture via les canaux officiels.
+        </div>
+
+        <div style="margin-top:24px;padding:24px;background:var(--green-light);border-radius:var(--radius);border:1px solid var(--green);">
+          <p style="font-weight:700;color:var(--green);margin-bottom:8px;">✓ Notre engagement</p>
+          <ul style="display:flex;flex-direction:column;gap:6px;">
+            <li style="font-size:0.88rem;color:var(--gray-700);">✓ Réponse garantie sous 24h ouvrées</li>
+            <li style="font-size:0.88rem;color:var(--gray-700);">✓ Une vraie personne vous répond</li>
+            <li style="font-size:0.88rem;color:var(--gray-700);">✓ Pas de réponse automatique générique</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Formulaire -->
+      <div class="contact-form">
+        <h2 style="margin-bottom:8px;font-size:1.4rem;">Envoyer un message</h2>
+        <p style="color:var(--gray-500);margin-bottom:28px;font-size:0.92rem;">Remplissez le formulaire ci-dessous et nous vous répondrons dans les meilleurs délais.</p>
+
+        <form id="contact-form">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+              <label class="form-label" for="prenom">Prénom</label>
+              <input class="form-input" type="text" id="prenom" name="prenom" placeholder="Votre prénom" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="nom">Nom</label>
+              <input class="form-input" type="text" id="nom" name="nom" placeholder="Votre nom" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Adresse email</label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="votre@email.fr" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="client-id">Numéro de client (optionnel)</label>
+            <input class="form-input" type="text" id="client-id" name="client-id" placeholder="Ex. RDV-12345">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sujet de votre demande</label>
+            <div class="form-radio-group">
+              <label class="form-radio"><input type="radio" name="sujet" value="question-service" checked> Question sur le service</label>
+              <label class="form-radio"><input type="radio" name="sujet" value="probleme-technique"> Problème technique</label>
+              <label class="form-radio"><input type="radio" name="sujet" value="abonnement"> Question sur mon abonnement</label>
+              <label class="form-radio"><input type="radio" name="sujet" value="remboursement"> Demande de remboursement</label>
+              <label class="form-radio"><input type="radio" name="sujet" value="autre"> Autre</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Votre message</label>
+            <textarea class="form-textarea" id="message" name="message" placeholder="Décrivez votre question ou votre situation..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary form-submit btn-lg">Envoyer mon message →</button>
+          <p class="form-note">Réponse garantie sous 24h ouvrées • Vos données ne sont jamais transmises à des tiers</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="footer-logo">RDVPrefectureFacile.fr</span>
+        <p class="footer-tagline">Le service d'alerte qui surveille les créneaux de préfecture pour vous, 24h/24 et 7j/7.</p>
+        <div class="footer-disclaimer">⚠️ Service privé et indépendant — non affilié à l'administration française.</div>
+      </div>
+      <div class="footer-col"><h4>Service</h4><ul><li><a href="comment-ca-marche.html">Comment ça marche</a></li><li><a href="tarifs.html">Tarifs</a></li><li><a href="prefectures.html">Préfectures</a></li><li><a href="inscription.html">Créer mon alerte</a></li></ul></div>
+      <div class="footer-col"><h4>Informations</h4><ul><li><a href="faq.html">FAQ</a></li><li><a href="blog/index.html">Blog</a></li><li><a href="a-propos.html">À propos</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Légal</h4><ul><li><a href="mentions-legales.html">Mentions légales</a></li><li><a href="cgv.html">CGV</a></li><li><a href="politique-confidentialite.html">Confidentialité</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2025 RDVPrefectureFacile.fr — Tous droits réservés</div>
+      <div class="footer-bottom-right"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="politique-confidentialite.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paiement — RDVPrefectureFacile.fr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">RDV<span>Prefecture</span><span class="dot">Facile</span></a>
+      <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--green);font-weight:600;">
+        🔒 Paiement sécurisé SSL 256-bit
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="section" style="background:var(--light);min-height:calc(100vh - 68px);">
+  <div class="container">
+
+    <!-- Progress bar -->
+    <div style="max-width:760px;margin:0 auto 40px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <span style="font-size:0.78rem;font-weight:600;color:var(--blue);">Étape 3/3 — Paiement</span>
+        <span style="font-size:0.78rem;color:var(--green);font-weight:600;">✓ Compte créé · ✓ Alerte configurée</span>
+      </div>
+      <div style="height:4px;background:var(--gray-100);border-radius:99px;">
+        <div style="height:100%;width:100%;background:var(--blue);border-radius:99px;"></div>
+      </div>
+    </div>
+
+    <div class="payment-grid" style="max-width:760px;margin:0 auto;">
+
+      <!-- Formulaire paiement -->
+      <div class="contact-form" style="padding:36px;">
+        <h2 style="font-size:1.4rem;margin-bottom:6px;">Informations de paiement</h2>
+        <p style="color:var(--gray-500);font-size:0.88rem;margin-bottom:28px;">Traité de façon sécurisée par Stripe — vos données bancaires ne transitent pas par nos serveurs.</p>
+
+        <form id="payment-form">
+          <div class="form-group">
+            <label class="form-label">Numéro de carte</label>
+            <input class="form-input" type="text" placeholder="1234 5678 9012 3456" maxlength="19">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+              <label class="form-label">Date d'expiration</label>
+              <input class="form-input" type="text" placeholder="MM / AA" maxlength="7">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Code CVV</label>
+              <input class="form-input" type="text" placeholder="123" maxlength="4">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom sur la carte</label>
+            <input class="form-input" type="text" placeholder="PRÉNOM NOM">
+          </div>
+
+          <div class="card-icons" style="margin-bottom:20px;">
+            <div class="card-icon">VISA</div>
+            <div class="card-icon">MC</div>
+            <div class="card-icon">AMEX</div>
+            <span style="font-size:0.75rem;color:var(--gray-500);">Cartes acceptées</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary form-submit btn-lg" style="background:var(--green);box-shadow:0 4px 14px rgba(15,164,122,0.30);">
+            🔒 Confirmer et activer mon alerte — 29,90 €/mois
+          </button>
+          <p class="form-note" style="margin-top:14px;">Satisfait ou remboursé 14 jours • Résiliation en 1 clic • Aucun engagement</p>
+        </form>
+      </div>
+
+      <!-- Récapitulatif -->
+      <div>
+        <div class="payment-summary">
+          <h3>Récapitulatif de commande</h3>
+          <div class="summary-line">
+            <span>Formule Intégrale</span>
+            <span class="summary-value">29,90 €</span>
+          </div>
+          <div class="summary-line">
+            <span style="font-size:0.82rem;color:var(--gray-500);">SMS + email + push illimitées</span>
+            <span></span>
+          </div>
+          <div class="summary-line">
+            <span style="font-size:0.82rem;color:var(--gray-500);">Alertes illimitées simultanées</span>
+            <span></span>
+          </div>
+          <div class="summary-line">
+            <span style="font-size:0.82rem;color:var(--gray-500);">Support chat 7j/7</span>
+            <span></span>
+          </div>
+          <div class="divider" style="margin:8px 0;"></div>
+          <div class="summary-line">
+            <span>Total aujourd'hui</span>
+            <span class="summary-value" style="color:var(--blue);font-size:1.1rem;">29,90 €</span>
+          </div>
+          <p style="font-size:0.75rem;color:var(--gray-500);margin-top:8px;">Puis 29,90 €/mois. Résiliez à tout moment.</p>
+        </div>
+
+        <div class="payment-security">
+          🔒 Paiement 100% sécurisé — Stripe PCI-DSS niveau 1
+        </div>
+
+        <div style="margin-top:16px;padding:16px;background:var(--amber-light);border-radius:var(--radius-sm);border-left:3px solid var(--amber);">
+          <p style="font-size:0.82rem;color:var(--dark);font-weight:600;margin-bottom:4px;">🛡️ Garantie satisfait ou remboursé</p>
+          <p style="font-size:0.78rem;color:var(--gray-700);">Aucune alerte reçue en 14 jours ? Remboursement intégral sur simple demande.</p>
+        </div>
+
+        <!-- Confiance -->
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--gray-700);">
+            <span style="color:var(--green);">✓</span> Sans engagement — résiliation en 1 clic
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--gray-700);">
+            <span style="color:var(--green);">✓</span> Facture PDF disponible immédiatement
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--gray-700);">
+            <span style="color:var(--green);">✓</span> Données hébergées en France — RGPD
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

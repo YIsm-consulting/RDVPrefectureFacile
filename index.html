@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RDVPrefectureFacile.fr — Alerte rendez-vous préfecture instantanée</title>
+  <meta name="description" content="Recevez une alerte SMS et email dès qu'un créneau se libère dans votre préfecture. Service d'alerte 24h/24, 7j/7. Satisfait ou remboursé 14 jours.">
+  <meta property="og:title" content="RDVPrefectureFacile.fr — Votre rendez-vous préfecture sans attendre">
+  <meta property="og:description" content="Alerte instantanée dès qu'un créneau se libère. 130+ préfectures couvertes. Sans engagement.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        RDV<span>Prefecture</span><span class="dot">Facile</span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="comment-ca-marche.html">Comment ça marche</a></li>
+        <li><a href="prefectures.html">Préfectures</a></li>
+        <li><a href="tarifs.html">Tarifs</a></li>
+        <li><a href="blog/index.html">Blog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="connexion.html" class="btn btn-secondary btn-sm">Se connecter</a>
+        <a href="inscription.html" class="btn btn-primary btn-sm">Créer mon alerte</a>
+      </div>
+      <button class="navbar-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="comment-ca-marche.html">Comment ça marche</a>
+  <a href="prefectures.html">Préfectures</a>
+  <a href="tarifs.html">Tarifs</a>
+  <a href="blog/index.html">Blog</a>
+  <a href="faq.html">FAQ</a>
+  <a href="contact.html">Contact</a>
+  <a href="connexion.html" class="btn btn-secondary">Se connecter</a>
+  <a href="inscription.html" class="btn btn-primary">Créer mon alerte</a>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge badge-blue">✓ Service privé indépendant — Non affilié à l'administration française</span>
+        </div>
+        <h1>Obtenez votre rendez-vous en préfecture <strong>sans attendre des mois</strong></h1>
+        <p class="hero-subtitle">RDVPrefectureFacile surveille les créneaux disponibles 24h/24 dans votre préfecture et vous alerte instantanément par SMS et email dès qu'une place se libère.</p>
+        <div class="hero-actions">
+          <a href="inscription.html" class="btn btn-primary btn-lg">→ Créer mon alerte maintenant</a>
+          <a href="comment-ca-marche.html" class="btn btn-ghost">Voir comment ça marche</a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-item">
+            <span class="check">✓</span>
+            <span>Résultats en moins de 7 jours en moyenne</span>
+          </div>
+          <div class="hero-trust-item">
+            <span class="check">✓</span>
+            <span>+15 000 alertes actives ce mois</span>
+          </div>
+          <div class="hero-trust-item">
+            <span class="check">✓</span>
+            <span>Satisfait ou remboursé 14 jours</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-notification">
+            <div class="phone-notif-header">
+              <div class="phone-notif-icon">📅</div>
+              <span class="phone-notif-app">RDVPrefectureFacile</span>
+              <span class="phone-notif-time">maintenant</span>
+            </div>
+            <div class="phone-notif-title">🟢 Créneau disponible !</div>
+            <div class="phone-notif-body">Préfecture de Paris 75 — Renouvellement titre de séjour<br>Mardi 3 juin à 09h30</div>
+            <a href="#" class="phone-notif-cta">→ Réserver ce créneau</a>
+          </div>
+          <div class="phone-status">
+            <div class="phone-status-dot"></div>
+            <span class="phone-status-text">Surveillance active 24h/24</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BARRE DE RECHERCHE
+     ============================================================ -->
+<section class="search-section">
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="prefecture-search" placeholder="Ex. Paris, Lyon, Marseille, Bordeaux..." aria-label="Rechercher une préfecture">
+      <select aria-label="Type de démarche">
+        <option value="">Ma démarche...</option>
+        <option value="renouvellement">Renouvellement titre de séjour</option>
+        <option value="premiere-demande">Première demande titre de séjour</option>
+        <option value="naturalisation">Naturalisation</option>
+        <option value="carte-resident">Carte de résident</option>
+        <option value="passeport">Passeport / CNI</option>
+        <option value="permis">Permis de conduire</option>
+        <option value="regroupement">Regroupement familial</option>
+        <option value="aes">Admission exceptionnelle au séjour</option>
+      </select>
+      <a href="inscription.html" class="btn btn-primary">→ Voir les disponibilités</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STATISTIQUES
+     ============================================================ -->
+<section class="section bg-light">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" data-target="28000" data-prefix="+" data-suffix="">+28 000</div>
+        <div class="stat-label">Alertes créées</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="95" data-suffix="%">95%</div>
+        <div class="stat-label">Obtiennent leur RDV</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="49" data-prefix="" data-suffix="/5">4,9/5</div>
+        <div class="stat-label">Satisfaction client</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="65" data-suffix=" jours">6,5 jours</div>
+        <div class="stat-label">Délai moyen pour un RDV</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     COMMENT ÇA MARCHE
+     ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <span class="badge badge-blue">Fonctionnement</span>
+      <h2>Simple comme 1, 2, 3</h2>
+      <p>En moins de 2 minutes, votre alerte est active et notre système surveille pour vous.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Configurez votre alerte</h3>
+        <p>Sélectionnez votre préfecture, votre type de démarche et renseignez votre numéro de téléphone et email. Tout se fait en ligne, en 2 minutes.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>On surveille pour vous 24h/24</h3>
+        <p>Notre système vérifie les disponibilités plusieurs fois par heure. Dès qu'un créneau se libère, vous êtes le premier averti.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Vous réservez votre place</h3>
+        <p>Vous recevez un SMS et un email avec le lien direct vers la page de réservation officielle. Confirmez en quelques secondes.</p>
+      </div>
+    </div>
+    <div class="text-center mt-8">
+      <a href="comment-ca-marche.html" class="btn btn-secondary">En savoir plus sur le fonctionnement →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DÉMARCHES COUVERTES
+     ============================================================ -->
+<section class="section bg-light">
+  <div class="container">
+    <div class="section-title">
+      <span class="badge badge-green">Couverture</span>
+      <h2>Toutes vos démarches en préfecture, couvertes</h2>
+      <p>RDVPrefectureFacile surveille les créneaux pour l'ensemble des démarches administratives disponibles en ligne.</p>
+    </div>
+    <div class="demarches-grid">
+      <a href="inscription.html?demarche=premiere-demande" class="demarche-card">
+        <div class="demarche-icon">📄</div>
+        <span class="demarche-name">Première demande de titre de séjour</span>
+      </a>
+      <a href="inscription.html?demarche=renouvellement" class="demarche-card">
+        <div class="demarche-icon">🔄</div>
+        <span class="demarche-name">Renouvellement de titre de séjour</span>
+      </a>
+      <a href="inscription.html?demarche=carte-resident" class="demarche-card">
+        <div class="demarche-icon">🪪</div>
+        <span class="demarche-name">Carte de résident 10 ans</span>
+      </a>
+      <a href="inscription.html?demarche=naturalisation" class="demarche-card">
+        <div class="demarche-icon">🇫🇷</div>
+        <span class="demarche-name">Naturalisation française</span>
+      </a>
+      <a href="inscription.html?demarche=passeport" class="demarche-card">
+        <div class="demarche-icon">📘</div>
+        <span class="demarche-name">Passeport / CNI</span>
+      </a>
+      <a href="inscription.html?demarche=permis" class="demarche-card">
+        <div class="demarche-icon">🚗</div>
+        <span class="demarche-name">Permis de conduire étranger</span>
+      </a>
+      <a href="inscription.html?demarche=regroupement" class="demarche-card">
+        <div class="demarche-icon">👨‍👩‍👧</div>
+        <span class="demarche-name">Regroupement familial</span>
+      </a>
+      <a href="inscription.html?demarche=aes" class="demarche-card">
+        <div class="demarche-icon">⚖️</div>
+        <span class="demarche-name">Admission exceptionnelle au séjour</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TÉMOIGNAGES
+     ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <span class="badge badge-amber">Avis clients</span>
+      <h2>Ils ont obtenu leur rendez-vous grâce à RDVPrefectureFacile</h2>
+      <p>Des milliers de personnes nous font confiance chaque mois pour obtenir leur rendez-vous en préfecture.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"J'attendais depuis 4 mois. En 3 jours après mon inscription, j'ai reçu une alerte SMS. J'ai eu mon rendez-vous le lendemain. Un service qui change vraiment la vie."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">FK</div>
+          <div>
+            <div class="author-name">Fatima K.</div>
+            <div class="author-location">Paris 75 — Renouvellement titre de séjour</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Simple, rapide, efficace. Le SMS est arrivé à 7h du matin, j'ai réservé ma place en 2 minutes avant d'aller au travail. Je recommande à toute ma communauté."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MT</div>
+          <div>
+            <div class="author-name">Minh T.</div>
+            <div class="author-location">Lyon 69 — Carte de résident</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"J'avais essayé seul pendant des semaines. RDVPrefectureFacile m'a alerté 4 fois en un mois — j'ai pu choisir le créneau qui m'arrangeait le mieux. Prix très raisonnable."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AP</div>
+          <div>
+            <div class="author-name">Andrei P.</div>
+            <div class="author-location">Bordeaux 33 — Naturalisation</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★☆</div>
+        <p class="testimonial-text">"Service sérieux et honnête. Ils ne font pas la réservation à votre place, mais le SMS arrive vraiment en temps réel. Aucun problème lors de ma demande de remboursement quand j'ai annulé."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">NS</div>
+          <div>
+            <div class="author-name">Naïma S.</div>
+            <div class="author-location">Marseille 13 — Première demande</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="trustpilot-row">
+      <div class="stars">★★★★★</div>
+      <span class="trustpilot-score">4,9/5</span>
+      <span class="trustpilot-label">basé sur plus de 1 200 avis vérifiés</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRÉFECTURES (carte)
+     ============================================================ -->
+<section class="section prefectures-section">
+  <div class="container">
+    <div class="prefectures-inner">
+      <div>
+        <span class="badge badge-blue" style="margin-bottom:16px;display:inline-flex;">🗺️ Couverture nationale</span>
+        <h2>Présent dans toute la France métropolitaine et les DOM-TOM</h2>
+        <p style="margin: 16px 0 28px;">RDVPrefectureFacile surveille les disponibilités dans <strong>130+ préfectures et sous-préfectures</strong>. Saisissez votre ville pour vérifier la couverture.</p>
+        <div class="prefectures-regions">
+          <div class="region-item"><span class="region-name">Île-de-France</span><span class="region-count">18 préfectures</span></div>
+          <div class="region-item"><span class="region-name">Auvergne-Rhône-Alpes</span><span class="region-count">16 préfectures</span></div>
+          <div class="region-item"><span class="region-name">Nouvelle-Aquitaine</span><span class="region-count">15 préfectures</span></div>
+          <div class="region-item"><span class="region-name">Occitanie</span><span class="region-count">13 préfectures</span></div>
+          <div class="region-item"><span class="region-name">Hauts-de-France</span><span class="region-count">11 préfectures</span></div>
+          <div class="region-item"><span class="region-name">Grand Est</span><span class="region-count">12 préfectures</span></div>
+        </div>
+        <a href="prefectures.html" class="btn btn-secondary" style="margin-top:20px;">Voir toutes les préfectures →</a>
+      </div>
+      <div class="prefectures-map-placeholder">🗺️</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GARANTIES / TRUST
+     ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>Un service fiable, transparent et sécurisé</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-title">Paiement sécurisé</div>
+        <div class="trust-desc">Stripe SSL 256-bit — vos données bancaires ne transitent jamais par nos serveurs</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔄</div>
+        <div class="trust-title">Sans engagement</div>
+        <div class="trust-desc">Résiliez à tout moment depuis votre espace client, en un seul clic, sans frais</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">📱</div>
+        <div class="trust-title">Alertes instantanées</div>
+        <div class="trust-desc">SMS + email + push 24h/24, 7j/7 — dès qu'un créneau se libère</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🛡️</div>
+        <div class="trust-title">Données protégées</div>
+        <div class="trust-desc">Hébergement France, conformité RGPD totale — jamais revendues à des tiers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA FINAL
+     ============================================================ -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Ne laissez plus un créneau vous passer sous le nez</h2>
+    <p>Les places en préfecture partent en quelques secondes. Chaque heure sans alerte est une opportunité manquée.</p>
+    <a href="inscription.html" class="btn btn-primary btn-lg">→ Je crée mon alerte maintenant — 29,90 €/mois</a>
+    <div class="cta-reassurance">Satisfait ou remboursé 14 jours • Aucun engagement • Résiliation en 1 clic</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="footer-logo">RDVPrefectureFacile.fr</span>
+        <p class="footer-tagline">Le service d'alerte qui surveille les créneaux de préfecture pour vous, 24h/24 et 7j/7.</p>
+        <div class="footer-disclaimer">⚠️ Service privé et indépendant — non affilié à l'administration française. Les rendez-vous en préfecture restent gratuits sur les sites officiels.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Service</h4>
+        <ul>
+          <li><a href="comment-ca-marche.html">Comment ça marche</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="prefectures.html">Préfectures couvertes</a></li>
+          <li><a href="inscription.html">Créer mon alerte</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="blog/index.html">Blog</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="cgv.html">CGV</a></li>
+          <li><a href="politique-confidentialite.html">Confidentialité</a></li>
+          <li><a href="cookies.html">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2025 RDVPrefectureFacile.fr — Tous droits réservés</div>
+      <div class="footer-bottom-right">
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="cgv.html">CGV</a>
+        <a href="politique-confidentialite.html">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
