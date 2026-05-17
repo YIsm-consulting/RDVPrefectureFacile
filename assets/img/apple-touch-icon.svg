@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <!-- Fond bleu -->
+  <rect width="180" height="180" fill="#1B4FD8"/>
+
+  <!-- Corps du calendrier -->
+  <rect x="30" y="55" width="120" height="95" rx="14" fill="white"/>
+
+  <!-- En-tête calendrier -->
+  <rect x="30" y="55" width="120" height="38" rx="14" fill="#1340B0"/>
+  <rect x="30" y="76" width="120" height="17" fill="#1340B0"/>
+
+  <!-- Anneaux -->
+  <rect x="58" y="40" width="12" height="28" rx="6" fill="white"/>
+  <rect x="110" y="40" width="12" height="28" rx="6" fill="white"/>
+
+  <!-- Checkmark vert -->
+  <circle cx="107" cy="113" r="32" fill="#0FA47A"/>
+  <polyline points="91,113 103,125 124,101" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
