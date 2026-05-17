@@ -6,3 +6,4 @@ Disallow: /admin/
 Disallow: /connexion.html
 
 Sitemap: https://rdvprefecturefacile.fr/sitemap.xml
+Host: https://rdvprefecturefacile.fr
