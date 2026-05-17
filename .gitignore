@@ -1,0 +1,26 @@
+# Dossier admin (sécurité)
+admin/
+
+# Environnement
+.env
+.env.local
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Node (si utilisé plus tard)
+node_modules/
+dist/

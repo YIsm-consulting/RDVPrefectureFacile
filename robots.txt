@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /tableau-de-bord.html
+Disallow: /paiement.html
+Disallow: /admin/
+Disallow: /connexion.html
+
+Sitemap: https://rdvprefecturefacile.fr/sitemap.xml

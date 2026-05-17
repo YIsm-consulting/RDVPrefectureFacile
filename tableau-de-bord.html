@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon tableau de bord — RDVPrefectureFacile.fr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .dashboard-layout { display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start; }
+    .dashboard-sidebar { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; position: sticky; top: 88px; }
+    .sidebar-user { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-100); }
+    .sidebar-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
+    .sidebar-name { font-weight: 700; font-size: 0.95rem; }
+    .sidebar-plan { font-size: 0.75rem; color: var(--green); font-weight: 600; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.9rem; color: var(--gray-700); font-weight: 500; transition: var(--transition); cursor: pointer; }
+    .sidebar-link:hover, .sidebar-link.active { background: var(--blue-light); color: var(--blue); }
+    .sidebar-link .icon { font-size: 1rem; width: 20px; text-align: center; }
+    .sidebar-divider { height: 1px; background: var(--gray-100); margin: 12px 0; }
+    .alert-status-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px; border: 1.5px solid var(--gray-100); }
+    .alert-status-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+    .alert-badge-active { display: inline-flex; align-items: center; gap: 6px; background: var(--green-light); color: var(--green); padding: 6px 14px; border-radius: 99px; font-size: 0.78rem; font-weight: 700; }
+    .alert-badge-inactive { background: var(--gray-100); color: var(--gray-500); }
+    .alert-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 1.5s infinite; }
+    .alert-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .alert-info-item { background: var(--light); border-radius: var(--radius-sm); padding: 14px; }
+    .alert-info-label { font-size: 0.72rem; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .alert-info-value { font-size: 0.92rem; font-weight: 600; color: var(--dark); }
+    .history-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
+    .history-item:last-child { border-bottom: none; }
+    .history-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .history-dot.missed { background: var(--gray-300); }
+    .history-time { font-size: 0.78rem; color: var(--gray-500); flex-shrink: 0; width: 130px; }
+    .history-details { flex: 1; }
+    .history-pref { font-size: 0.88rem; font-weight: 600; color: var(--dark); }
+    .history-slot { font-size: 0.8rem; color: var(--gray-500); }
+    .history-status { font-size: 0.75rem; font-weight: 600; }
+    .history-status.sent { color: var(--green); }
+    .history-status.missed { color: var(--gray-400); }
+    .toggle-switch { position: relative; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track { width: 44px; height: 24px; background: var(--green); border-radius: 99px; position: relative; transition: var(--transition); }
+    .toggle-track::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: var(--transition); }
+    input:checked + .toggle-track { background: var(--green); }
+    input:not(:checked) + .toggle-track { background: var(--gray-300); }
+    input:checked + .toggle-track::after { transform: translateX(20px); }
+    .stat-mini { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-100); padding: 20px; text-align: center; }
+    .stat-mini .number { font-size: 1.8rem; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
+    .stat-mini .label { font-size: 0.78rem; color: var(--gray-500); }
+    @media (max-width: 900px) {
+      .dashboard-layout { grid-template-columns: 1fr; }
+      .dashboard-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">RDV<span>Prefecture</span><span class="dot">Facile</span></a>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="alert-badge-active" style="font-size:0.75rem;"><div class="alert-dot"></div> Alerte active</div>
+      </div>
+      <div class="navbar-actions">
+        <a href="connexion.html" class="btn btn-ghost btn-sm">Déconnexion</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="section-sm" style="background:var(--light);">
+  <div class="container">
+
+    <div style="margin-bottom:28px;">
+      <h1 style="font-size:1.6rem;margin-bottom:4px;">Bonjour, Mohamed 👋</h1>
+      <p style="color:var(--gray-500);font-size:0.92rem;">Votre alerte est active — nous surveillons les créneaux pour vous.</p>
+    </div>
+
+    <div class="dashboard-layout">
+
+      <!-- Sidebar -->
+      <div class="dashboard-sidebar">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">MK</div>
+          <div>
+            <div class="sidebar-name">Mohamed K.</div>
+            <div class="sidebar-plan">✓ Formule Intégrale</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="sidebar-link active"><span class="icon">🏠</span> Tableau de bord</a>
+          <a class="sidebar-link" href="mon-alerte.html"><span class="icon">🔔</span> Mon alerte</a>
+          <a class="sidebar-link"><span class="icon">📋</span> Historique</a>
+          <div class="sidebar-divider"></div>
+          <a class="sidebar-link"><span class="icon">💳</span> Mon abonnement</a>
+          <a class="sidebar-link"><span class="icon">👤</span> Mon compte</a>
+          <div class="sidebar-divider"></div>
+          <a class="sidebar-link" href="faq.html"><span class="icon">❓</span> Aide / FAQ</a>
+          <a class="sidebar-link" href="contact.html"><span class="icon">💬</span> Contacter le support</a>
+          <div class="sidebar-divider"></div>
+          <a class="sidebar-link" style="color:var(--red);" href="connexion.html"><span class="icon">🚪</span> Déconnexion</a>
+        </nav>
+      </div>
+
+      <!-- Contenu principal -->
+      <div>
+
+        <!-- Stats mini -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+          <div class="stat-mini">
+            <div class="number">12</div>
+            <div class="label">Alertes reçues</div>
+          </div>
+          <div class="stat-mini">
+            <div class="number">4</div>
+            <div class="label">Jours actifs</div>
+          </div>
+          <div class="stat-mini">
+            <div class="number" style="color:var(--green);">~</div>
+            <div class="label">RDV obtenu ?</div>
+          </div>
+        </div>
+
+        <!-- Alerte active -->
+        <div class="alert-status-card">
+          <div class="alert-status-header">
+            <div>
+              <h3 style="margin-bottom:6px;">Mon alerte en cours</h3>
+              <p style="font-size:0.85rem;color:var(--gray-500);">Créée le 13 mai 2025</p>
+            </div>
+            <div>
+              <span class="alert-badge-active"><div class="alert-dot"></div> Active</span>
+            </div>
+          </div>
+
+          <div class="alert-info-grid">
+            <div class="alert-info-item">
+              <div class="alert-info-label">Préfecture</div>
+              <div class="alert-info-value">Paris (75) — Préfecture de Police</div>
+            </div>
+            <div class="alert-info-item">
+              <div class="alert-info-label">Démarche</div>
+              <div class="alert-info-value">Renouvellement titre de séjour</div>
+            </div>
+            <div class="alert-info-item">
+              <div class="alert-info-label">Canal SMS</div>
+              <div class="alert-info-value">+33 6 •• •• •• 42</div>
+            </div>
+            <div class="alert-info-item">
+              <div class="alert-info-label">Canal Email</div>
+              <div class="alert-info-value">moh***@gmail.com</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--green-light);border-radius:var(--radius-sm);">
+            <div>
+              <div style="font-size:0.88rem;font-weight:700;color:var(--green);">Surveillance active</div>
+              <div style="font-size:0.78rem;color:var(--gray-700);">Vérification toutes les 2 minutes — 24h/24</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <div class="toggle-track"></div>
+              <span style="font-size:0.82rem;font-weight:600;color:var(--gray-700);">Actif</span>
+            </label>
+          </div>
+
+          <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="mon-alerte.html" class="btn btn-secondary btn-sm">Modifier mon alerte</a>
+            <button class="btn btn-ghost btn-sm" style="color:var(--red);">Désactiver l'alerte</button>
+          </div>
+        </div>
+
+        <!-- Historique des alertes -->
+        <div class="alert-status-card">
+          <h3 style="margin-bottom:20px;">Historique des alertes reçues</h3>
+          <div>
+            <div class="history-item">
+              <div class="history-dot"></div>
+              <div class="history-time">Auj. 07h14</div>
+              <div class="history-details">
+                <div class="history-pref">Préfecture de Paris (75)</div>
+                <div class="history-slot">Renouvellement — Mardi 3 juin à 09h30</div>
+              </div>
+              <span class="history-status sent">✓ SMS envoyé</span>
+            </div>
+            <div class="history-item">
+              <div class="history-dot"></div>
+              <div class="history-time">Hier 22h51</div>
+              <div class="history-details">
+                <div class="history-pref">Préfecture de Paris (75)</div>
+                <div class="history-slot">Renouvellement — Lundi 2 juin à 14h00</div>
+              </div>
+              <span class="history-status sent">✓ SMS envoyé</span>
+            </div>
+            <div class="history-item">
+              <div class="history-dot missed"></div>
+              <div class="history-time">16 mai 11h03</div>
+              <div class="history-details">
+                <div class="history-pref">Préfecture de Paris (75)</div>
+                <div class="history-slot">Renouvellement — Vendredi 30 mai à 10h15</div>
+              </div>
+              <span class="history-status missed">Créneau expiré</span>
+            </div>
+            <div class="history-item">
+              <div class="history-dot"></div>
+              <div class="history-time">15 mai 09h27</div>
+              <div class="history-details">
+                <div class="history-pref">Préfecture de Paris (75)</div>
+                <div class="history-slot">Renouvellement — Jeudi 29 mai à 08h45</div>
+              </div>
+              <span class="history-status sent">✓ SMS envoyé</span>
+            </div>
+            <div class="history-item">
+              <div class="history-dot"></div>
+              <div class="history-time">13 mai 14h58</div>
+              <div class="history-details">
+                <div class="history-pref">Préfecture de Paris (75)</div>
+                <div class="history-slot">Renouvellement — Mercredi 28 mai à 11h00</div>
+              </div>
+              <span class="history-status sent">✓ SMS envoyé</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;text-align:center;">
+            <button class="btn btn-ghost btn-sm" style="color:var(--blue);">Voir tout l'historique →</button>
+          </div>
+        </div>
+
+        <!-- Abonnement -->
+        <div class="alert-status-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3>Mon abonnement</h3>
+            <span class="badge badge-green">Actif</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div class="alert-info-item">
+              <div class="alert-info-label">Formule</div>
+              <div class="alert-info-value">Intégrale</div>
+            </div>
+            <div class="alert-info-item">
+              <div class="alert-info-label">Montant</div>
+              <div class="alert-info-value">29,90 €/mois</div>
+            </div>
+            <div class="alert-info-item">
+              <div class="alert-info-label">Prochain prélèvement</div>
+              <div class="alert-info-value">13 juin 2025</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm">📄 Télécharger ma facture</button>
+            <button class="btn btn-ghost btn-sm" style="color:var(--red);">Résilier mon abonnement</button>
+          </div>
+        </div>
+
+        <!-- Conseil -->
+        <div style="background:var(--amber-light);border-radius:var(--radius);padding:20px;border-left:4px solid var(--amber);">
+          <p style="font-weight:700;margin-bottom:6px;">💡 Conseil pour maximiser vos chances</p>
+          <p style="font-size:0.88rem;color:var(--gray-700);">Activez les notifications push sur votre téléphone et assurez-vous que notre numéro n'est pas bloqué. Les créneaux partent en moins de 2 minutes — chaque seconde compte !</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
