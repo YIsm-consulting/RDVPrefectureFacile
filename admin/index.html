@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — RDVPrefectureFacile.fr</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.svg">
+  <meta name="theme-color" content="#1B4FD8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    body { background: #0F172A; }
+    .admin-layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+    /* Sidebar admin */
+    .admin-sidebar {
+      background: #1E293B;
+      padding: 24px 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(255,255,255,0.05);
+      z-index: 50;
+    }
+    .admin-logo {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .admin-logo span { color: #60A5FA; }
+    .admin-nav-label {
+      padding: 8px 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 8px;
+    }
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.65);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    .admin-nav-item:hover, .admin-nav-item.active {
+      background: rgba(255,255,255,0.06);
+      color: var(--white);
+    }
+    .admin-nav-item.active { border-left: 3px solid #60A5FA; padding-left: 17px; }
+    .admin-nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+    .admin-sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .admin-user { display: flex; align-items: center; gap: 10px; }
+    .admin-user-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .admin-user-name { font-size: 0.82rem; font-weight: 600; color: var(--white); }
+    .admin-user-role { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+
+    /* Main content */
+    .admin-main {
+      margin-left: 240px;
+      padding: 32px;
+      min-height: 100vh;
+      background: #0F172A;
+    }
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .admin-page-title { font-size: 1.4rem; font-weight: 800; color: var(--white); }
+    .admin-topbar-right { display: flex; align-items: center; gap: 12px; }
+    .admin-badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15,164,122,0.15);
+      color: var(--green);
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: 1px solid rgba(15,164,122,0.3);
+    }
+
+    /* KPI Cards */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
+    .kpi-card {
+      background: #1E293B;
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .kpi-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+    .kpi-value { font-size: 2rem; font-weight: 900; color: var(--white); line-height: 1; margin-bottom: 8px; }
+    .kpi-trend { font-size: 0.78rem; }
+    .kpi-trend.up   { color: var(--green); }
+    .kpi-trend.down { color: var(--red); }
+    .kpi-trend.flat { color: rgba(255,255,255,0.4); }
+
+    /* Tables */
+    .admin-card {
+      background: #1E293B;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .admin-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .admin-card-title { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table thead tr { background: rgba(255,255,255,0.03); }
+    .admin-table th { padding: 12px 20px; text-align: left; font-size: 0.72rem; color: rgba(255,255,255,0.35); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .admin-table td { padding: 14px 20px; font-size: 0.88rem; color: rgba(255,255,255,0.75); border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .status-active   { background: rgba(15,164,122,0.15); color: var(--green); }
+    .status-inactive { background: rgba(107,114,128,0.15); color: rgba(255,255,255,0.4); }
+    .status-pending  { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .status-refund   { background: rgba(239,68,68,0.15); color: var(--red); }
+
+    /* Charts placeholder */
+    .chart-placeholder {
+      height: 180px;
+      background: linear-gradient(to top, rgba(27,79,216,0.15) 0%, transparent 100%);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 16px;
+    }
+    .chart-bar {
+      flex: 1;
+      background: rgba(27,79,216,0.6);
+      border-radius: 4px 4px 0 0;
+      transition: var(--transition);
+    }
+    .chart-bar:hover { background: rgba(27,79,216,0.9); }
+
+    /* Two col layout */
+    .admin-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    @media (max-width: 1100px) {
+      .kpi-grid { grid-template-columns: repeat(2,1fr); }
+      .admin-two-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 900px) {
+      .admin-sidebar { transform: translateX(-100%); }
+      .admin-main { margin-left: 0; padding: 20px; }
+    }
+  </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <!-- Fin Google Analytics -->
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="admin-sidebar">
+  <div class="admin-logo">RDV<span>Prefecture</span>Facile <br><small style="font-weight:400;color:rgba(255,255,255,0.3);font-size:0.65rem;">ADMINISTRATION</small></div>
+
+  <div class="admin-nav-label">Vue générale</div>
+  <a class="admin-nav-item active"><span class="icon">📊</span> Dashboard</a>
+  <a class="admin-nav-item"><span class="icon">💰</span> Revenus</a>
+
+  <div class="admin-nav-label">Utilisateurs</div>
+  <a class="admin-nav-item"><span class="icon">👥</span> Abonnés</a>
+  <a class="admin-nav-item"><span class="icon">🔔</span> Alertes actives</a>
+  <a class="admin-nav-item"><span class="icon">📱</span> SMS envoyés</a>
+
+  <div class="admin-nav-label">Système</div>
+  <a class="admin-nav-item"><span class="icon">🤖</span> Moniteur robot</a>
+  <a class="admin-nav-item"><span class="icon">🏛️</span> Préfectures</a>
+  <a class="admin-nav-item"><span class="icon">⚠️</span> Logs & erreurs</a>
+
+  <div class="admin-nav-label">Finances</div>
+  <a class="admin-nav-item"><span class="icon">💳</span> Paiements Stripe</a>
+  <a class="admin-nav-item"><span class="icon">🔄</span> Remboursements</a>
+  <a class="admin-nav-item"><span class="icon">📄</span> Factures</a>
+
+  <div class="admin-nav-label">Marketing</div>
+  <a class="admin-nav-item"><span class="icon">📧</span> Emails</a>
+  <a class="admin-nav-item"><span class="icon">📝</span> Blog</a>
+
+  <div class="admin-nav-label">Paramètres</div>
+  <a class="admin-nav-item"><span class="icon">⚙️</span> Configuration</a>
+
+  <div class="admin-sidebar-footer">
+    <div class="admin-user">
+      <div class="admin-user-avatar">AD</div>
+      <div>
+        <div class="admin-user-name">Admin</div>
+        <div class="admin-user-role">Super-administrateur</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Contenu principal -->
+<main class="admin-main">
+
+  <!-- Topbar -->
+  <div class="admin-topbar">
+    <div>
+      <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Samedi 17 mai 2025 — 14h32</div>
+      <div class="admin-page-title">Tableau de bord</div>
+    </div>
+    <div class="admin-topbar-right">
+      <div class="admin-badge-live"><div style="width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;"></div> Robot actif</div>
+      <a href="../index.html" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">← Voir le site</a>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Abonnés actifs</div>
+      <div class="kpi-value">347</div>
+      <div class="kpi-trend up">↑ +23 ce mois (+7,1%)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Revenus du mois</div>
+      <div class="kpi-value">10 376 €</div>
+      <div class="kpi-trend up">↑ +2 130 € vs mois dernier</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">SMS envoyés aujourd'hui</div>
+      <div class="kpi-value">1 842</div>
+      <div class="kpi-trend flat">— Taux livraison : 99,2%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Taux de rétention</div>
+      <div class="kpi-value">78%</div>
+      <div class="kpi-trend up">↑ +3% vs mois dernier</div>
+    </div>
+  </div>
+
+  <!-- Revenus + Nouvelles inscriptions -->
+  <div class="admin-two-col" style="margin-bottom:24px;">
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-title">Revenus mensuels (€)</span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">6 derniers mois</span>
+      </div>
+      <div style="padding:20px;">
+        <div class="chart-placeholder">
+          <div class="chart-bar" style="height:40%;"></div>
+          <div class="chart-bar" style="height:55%;"></div>
+          <div class="chart-bar" style="height:48%;"></div>
+          <div class="chart-bar" style="height:65%;"></div>
+          <div class="chart-bar" style="height:80%;"></div>
+          <div class="chart-bar" style="height:100%;background:rgba(27,79,216,0.9);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;">
+          <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Déc.</span>
+          <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Jan.</span>
+          <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Fév.</span>
+          <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Mar.</span>
+          <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Avr.</span>
+          <span style="font-size:0.7rem;color:rgba(255,255,255,0.3);">Mai</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-title">Nouvelles inscriptions (30j)</span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">Funnel de conversion</span>
+      </div>
+      <div style="padding:24px;display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.82rem;">
+            <span style="color:rgba(255,255,255,0.6);">Visiteurs uniques</span>
+            <span style="color:var(--white);font-weight:700;">4 230</span>
+          </div>
+          <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:99px;">
+            <div style="height:100%;width:100%;background:rgba(27,79,216,0.6);border-radius:99px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.82rem;">
+            <span style="color:rgba(255,255,255,0.6);">Inscriptions démarrées</span>
+            <span style="color:var(--white);font-weight:700;">892 (21%)</span>
+          </div>
+          <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:99px;">
+            <div style="height:100%;width:21%;background:rgba(27,79,216,0.8);border-radius:99px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.82rem;">
+            <span style="color:rgba(255,255,255,0.6);">Paiements complétés</span>
+            <span style="color:var(--white);font-weight:700;">234 (26%)</span>
+          </div>
+          <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:99px;">
+            <div style="height:100%;width:6%;background:var(--green);border-radius:99px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.82rem;">
+            <span style="color:rgba(255,255,255,0.6);">Toujours abonnés à 30j</span>
+            <span style="color:var(--white);font-weight:700;">183 (78%)</span>
+          </div>
+          <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:99px;">
+            <div style="height:100%;width:4.3%;background:var(--amber);border-radius:99px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Derniers abonnés -->
+  <div class="admin-card" style="margin-bottom:24px;">
+    <div class="admin-card-header">
+      <span class="admin-card-title">Derniers abonnés</span>
+      <button class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Voir tous →</button>
+    </div>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Utilisateur</th>
+          <th>Préfecture</th>
+          <th>Démarche</th>
+          <th>Inscription</th>
+          <th>Statut</th>
+          <th>Prochain prélèvement</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div style="font-weight:600;color:var(--white);">Mohamed K.</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">moh***@gmail.com</div></td>
+          <td>Paris (75)</td>
+          <td>Renouvellement TS</td>
+          <td>13/05/2025</td>
+          <td><span class="status-pill status-active">Actif</span></td>
+          <td>13/06/2025</td>
+          <td><button class="btn btn-ghost btn-sm" style="color:#60A5FA;font-size:0.75rem;padding:4px 10px;">Voir</button></td>
+        </tr>
+        <tr>
+          <td><div style="font-weight:600;color:var(--white);">Fatima B.</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">fat***@hotmail.fr</div></td>
+          <td>Lyon (69)</td>
+          <td>Naturalisation</td>
+          <td>12/05/2025</td>
+          <td><span class="status-pill status-active">Actif</span></td>
+          <td>12/06/2025</td>
+          <td><button class="btn btn-ghost btn-sm" style="color:#60A5FA;font-size:0.75rem;padding:4px 10px;">Voir</button></td>
+        </tr>
+        <tr>
+          <td><div style="font-weight:600;color:var(--white);">Jean-Paul T.</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">jp***@yahoo.fr</div></td>
+          <td>Marseille (13)</td>
+          <td>Carte de résident</td>
+          <td>11/05/2025</td>
+          <td><span class="status-pill status-pending">En attente</span></td>
+          <td>11/06/2025</td>
+          <td><button class="btn btn-ghost btn-sm" style="color:#60A5FA;font-size:0.75rem;padding:4px 10px;">Voir</button></td>
+        </tr>
+        <tr>
+          <td><div style="font-weight:600;color:var(--white);">Amira S.</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">ami***@gmail.com</div></td>
+          <td>Bordeaux (33)</td>
+          <td>Première demande TS</td>
+          <td>10/05/2025</td>
+          <td><span class="status-pill status-active">Actif</span></td>
+          <td>10/06/2025</td>
+          <td><button class="btn btn-ghost btn-sm" style="color:#60A5FA;font-size:0.75rem;padding:4px 10px;">Voir</button></td>
+        </tr>
+        <tr>
+          <td><div style="font-weight:600;color:var(--white);">Sven L.</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">sven***@gmail.com</div></td>
+          <td>Strasbourg (67)</td>
+          <td>Passeport</td>
+          <td>09/05/2025</td>
+          <td><span class="status-pill status-refund">Remboursé</span></td>
+          <td>—</td>
+          <td><button class="btn btn-ghost btn-sm" style="color:#60A5FA;font-size:0.75rem;padding:4px 10px;">Voir</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Alertes actives + Santé système -->
+  <div class="admin-two-col">
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-title">Alertes actives par préfecture</span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">Top 5</span>
+      </div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:0.82rem;color:rgba(255,255,255,0.6);width:130px;">Paris (75)</span>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:99px;"><div style="height:100%;width:82%;background:var(--blue);border-radius:99px;"></div></div>
+          <span style="font-size:0.82rem;color:var(--white);font-weight:700;width:30px;text-align:right;">143</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:0.82rem;color:rgba(255,255,255,0.6);width:130px;">Lyon (69)</span>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:99px;"><div style="height:100%;width:48%;background:var(--blue);border-radius:99px;"></div></div>
+          <span style="font-size:0.82rem;color:var(--white);font-weight:700;width:30px;text-align:right;">84</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:0.82rem;color:rgba(255,255,255,0.6);width:130px;">Marseille (13)</span>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:99px;"><div style="height:100%;width:38%;background:var(--blue);border-radius:99px;"></div></div>
+          <span style="font-size:0.82rem;color:var(--white);font-weight:700;width:30px;text-align:right;">66</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:0.82rem;color:rgba(255,255,255,0.6);width:130px;">Toulouse (31)</span>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:99px;"><div style="height:100%;width:22%;background:var(--blue);border-radius:99px;"></div></div>
+          <span style="font-size:0.82rem;color:var(--white);font-weight:700;width:30px;text-align:right;">38</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:0.82rem;color:rgba(255,255,255,0.6);width:130px;">Bordeaux (33)</span>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:99px;"><div style="height:100%;width:9%;background:var(--blue);border-radius:99px;"></div></div>
+          <span style="font-size:0.82rem;color:var(--white);font-weight:700;width:30px;text-align:right;">16</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-title">Santé du système</span>
+        <div class="admin-badge-live" style="font-size:0.72rem;"><div style="width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;"></div> Tout opérationnel</div>
+      </div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
+          <div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">🤖 Robot de surveillance</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Dernier scan : il y a 47 secondes</div>
+          </div>
+          <span class="status-pill status-active">Actif</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
+          <div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">📱 Passerelle SMS (Twilio)</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Livraison : 99,2% — Latence : 1,2s</div>
+          </div>
+          <span class="status-pill status-active">Actif</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
+          <div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">📧 Email (SendGrid)</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Taux d'ouverture : 68% — Livraison : 99,8%</div>
+          </div>
+          <span class="status-pill status-active">Actif</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
+          <div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">💳 Paiements (Stripe)</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Taux succès : 98,7% — 0 litige en cours</div>
+          </div>
+          <span class="status-pill status-active">Actif</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
+          <div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">🌐 Serveur (Uptime)</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">99,98% uptime — Temps réponse : 142ms</div>
+          </div>
+          <span class="status-pill status-active">Actif</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+const API = 'https://rdvprefecturefacile-backend-production.up.railway.app';
+
+function getAdminToken() { return localStorage.getItem('rdv_admin_token'); }
+function setAdminToken(t) { localStorage.setItem('rdv_admin_token', t); }
+function adminLogout() { localStorage.removeItem('rdv_admin_token'); location.reload(); }
+
+async function adminFetch(path) {
+  const res = await fetch(API + path, {
+    headers: { 'Authorization': 'Bearer ' + getAdminToken(), 'Content-Type': 'application/json' }
+  });
+  if (res.status === 401 || res.status === 403) { adminLogout(); return null; }
+  return res.json();
+}
+
+/* ── Login overlay ── */
+function showLoginOverlay() {
+  const overlay = document.createElement('div');
+  overlay.id = 'admin-login-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:#0F172A;display:flex;align-items:center;justify-content:center;z-index:9999;';
+  overlay.innerHTML = `
+    <div style="background:#1E293B;padding:40px;border-radius:12px;width:360px;border:1px solid rgba(255,255,255,0.08);">
+      <h2 style="color:#fff;font-size:1.3rem;margin-bottom:8px;">Administration</h2>
+      <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin-bottom:28px;">Accès réservé</p>
+      <div style="margin-bottom:16px;">
+        <label style="color:rgba(255,255,255,0.6);font-size:0.8rem;display:block;margin-bottom:6px;">Email</label>
+        <input id="admin-email" type="email" placeholder="votre@email.fr" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:0.9rem;box-sizing:border-box;">
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="color:rgba(255,255,255,0.6);font-size:0.8rem;display:block;margin-bottom:6px;">Mot de passe</label>
+        <input id="admin-password" type="password" placeholder="••••••••" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:0.9rem;box-sizing:border-box;">
+      </div>
+      <button id="admin-login-btn" style="width:100%;padding:12px;background:#1B4FD8;color:#fff;border:none;border-radius:8px;font-size:0.95rem;font-weight:700;cursor:pointer;">Se connecter</button>
+      <p id="admin-login-error" style="color:#F87171;font-size:0.82rem;text-align:center;margin-top:12px;display:none;"></p>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  document.getElementById('admin-login-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('admin-login-btn');
+    const err = document.getElementById('admin-login-error');
+    btn.textContent = 'Connexion…';
+    btn.disabled = true;
+    err.style.display = 'none';
+    try {
+      const res = await fetch(API + '/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('admin-email').value,
+          password: document.getElementById('admin-password').value
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Accès refusé');
+      setAdminToken(data.token);
+      overlay.remove();
+      loadDashboard();
+    } catch (e) {
+      err.textContent = e.message;
+      err.style.display = 'block';
+      btn.textContent = 'Se connecter';
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('admin-password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('admin-login-btn').click();
+  });
+}
+
+/* ── Charger les vraies données ── */
+async function loadDashboard() {
+  const [stats, usersData] = await Promise.all([
+    adminFetch('/api/admin/stats'),
+    adminFetch('/api/admin/users')
+  ]);
+
+  if (!stats || !usersData) return;
+
+  /* KPIs */
+  document.querySelectorAll('.kpi-value')[0].textContent = stats.activeSubscriptions;
+  document.querySelectorAll('.kpi-value')[1].textContent = (stats.activeSubscriptions * 29.90).toLocaleString('fr-FR', {style:'currency', currency:'EUR'});
+  document.querySelectorAll('.kpi-value')[2].textContent = stats.totalNotifications;
+  document.querySelectorAll('.kpi-value')[3].textContent = stats.totalUsers;
+
+  document.querySelectorAll('.kpi-label')[0].textContent = 'Abonnés actifs';
+  document.querySelectorAll('.kpi-label')[1].textContent = 'Revenus estimés/mois';
+  document.querySelectorAll('.kpi-label')[2].textContent = 'Notifications envoyées';
+  document.querySelectorAll('.kpi-label')[3].textContent = 'Utilisateurs inscrits';
+
+  document.querySelectorAll('.kpi-trend')[0].textContent = `${stats.activeAlerts} alertes actives`;
+  document.querySelectorAll('.kpi-trend')[1].textContent = `${stats.activeSubscriptions} × 29,90 €`;
+  document.querySelectorAll('.kpi-trend')[2].textContent = 'Total depuis le lancement';
+  document.querySelectorAll('.kpi-trend')[3].textContent = `Dont ${stats.activeSubscriptions} abonnés`;
+
+  /* Tableau utilisateurs */
+  const tbody = document.querySelector('.admin-table tbody');
+  if (usersData.users && usersData.users.length > 0) {
+    tbody.innerHTML = usersData.users.slice(0, 10).map(u => `
+      <tr>
+        <td>
+          <div style="font-weight:600;color:var(--white);">${u.first_name || ''} ${u.last_name || ''}</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${u.email}</div>
+        </td>
+        <td>—</td>
+        <td>—</td>
+        <td>${new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
+        <td><span class="status-pill ${u.stripe_customer_id ? 'status-active' : 'status-pending'}">${u.stripe_customer_id ? 'Abonné' : 'Inscrit'}</span></td>
+        <td>—</td>
+        <td><span style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${u.role}</span></td>
+      </tr>`).join('');
+  } else {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun utilisateur</td></tr>';
+  }
+
+  /* Date */
+  document.querySelector('.admin-topbar .admin-page-title').previousElementSibling.textContent =
+    new Date().toLocaleDateString('fr-FR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  /* Bouton déconnexion */
+  const footer = document.querySelector('.admin-sidebar-footer');
+  if (footer) {
+    const logoutBtn = document.createElement('button');
+    logoutBtn.style.cssText = 'margin:0 20px 16px;padding:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:8px;color:#F87171;font-size:0.8rem;cursor:pointer;width:calc(100% - 40px);';
+    logoutBtn.textContent = '🚪 Déconnexion';
+    logoutBtn.onclick = adminLogout;
+    footer.parentNode.insertBefore(logoutBtn, footer);
+  }
+}
+
+/* ── Init ── */
+if (!getAdminToken()) {
+  showLoginOverlay();
+} else {
+  loadDashboard();
+}
+</script>
+</body>
+</html>

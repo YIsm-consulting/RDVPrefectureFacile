@@ -1,6 +1,3 @@
-# Dossier admin (sécurité)
-admin/
-
 # Environnement
 .env
 .env.local
