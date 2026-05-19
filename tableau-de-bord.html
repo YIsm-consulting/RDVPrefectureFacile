@@ -105,16 +105,14 @@
         </div>
         <nav class="sidebar-nav">
           <a class="sidebar-link active"><span class="icon">🏠</span> Tableau de bord</a>
-          <a class="sidebar-link"><span class="icon">🔔</span> Mon alerte</a>
-          <a class="sidebar-link"><span class="icon">📋</span> Historique</a>
+          <a class="sidebar-link" id="sidebar-alerte"><span class="icon">🔔</span> Mon alerte</a>
           <div class="sidebar-divider"></div>
-          <a class="sidebar-link"><span class="icon">💳</span> Mon abonnement</a>
-          <a class="sidebar-link"><span class="icon">👤</span> Mon compte</a>
+          <a class="sidebar-link" id="sidebar-abonnement" style="cursor:pointer;"><span class="icon">💳</span> Mon abonnement</a>
           <div class="sidebar-divider"></div>
           <a class="sidebar-link" href="faq.html"><span class="icon">❓</span> Aide / FAQ</a>
           <a class="sidebar-link" href="contact.html"><span class="icon">💬</span> Contacter le support</a>
           <div class="sidebar-divider"></div>
-          <a class="sidebar-link" style="color:var(--red);" href="connexion.html"><span class="icon">🚪</span> Déconnexion</a>
+          <a class="sidebar-link" id="sidebar-logout" style="color:var(--red);cursor:pointer;"><span class="icon">🚪</span> Déconnexion</a>
         </nav>
       </div>
 
@@ -352,13 +350,26 @@
   }
 
   /* Déconnexion */
-  document.querySelector('.sidebar-link[href="connexion.html"]')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    API.logout();
-  });
+  document.getElementById('sidebar-logout')?.addEventListener('click', () => API.logout());
   document.querySelector('.navbar-actions a[href="connexion.html"]')?.addEventListener('click', (e) => {
     e.preventDefault();
     API.logout();
+  });
+
+  /* Mon abonnement → Stripe Portal */
+  document.getElementById('sidebar-abonnement')?.addEventListener('click', async () => {
+    const el = document.getElementById('sidebar-abonnement');
+    el.textContent = '⏳ Chargement…';
+    try {
+      await API.redirectToPortal();
+    } catch {
+      el.innerHTML = '<span class="icon">💳</span> Mon abonnement';
+    }
+  });
+
+  /* Mon alerte → scroll vers la carte alerte */
+  document.getElementById('sidebar-alerte')?.addEventListener('click', () => {
+    document.querySelector('.alert-status-card')?.scrollIntoView({ behavior: 'smooth' });
   });
 })();
 </script>
