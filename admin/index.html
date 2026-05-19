@@ -422,8 +422,77 @@
     </table>
   </div>
 
+  <!-- Robot moniteur (temps réel) -->
+  <div class="admin-card" style="margin-top:24px;">
+    <div class="admin-card-header">
+      <span class="admin-card-title">🤖 Robot de surveillance</span>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div id="robot-status-badge" class="admin-badge-live"><div style="width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;"></div> Chargement…</div>
+        <button id="btn-trigger-scan" onclick="triggerScan()" class="btn btn-secondary btn-sm" style="background:rgba(27,79,216,0.2);border-color:rgba(27,79,216,0.4);color:#93C5FD;font-size:0.78rem;">⚡ Lancer un scan</button>
+      </div>
+    </div>
+    <div style="padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;" id="robot-stats">
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.5rem;font-weight:900;color:var(--white);" id="robot-total-scans">—</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Scans effectués</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.5rem;font-weight:900;color:var(--white);" id="robot-alert-count">—</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Alertes surveillées</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.5rem;font-weight:900;color:var(--green);" id="robot-slots-found">—</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Créneaux trouvés</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.1rem;font-weight:700;color:rgba(255,255,255,0.7);" id="robot-last-scan">—</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Dernier scan</div>
+      </div>
+    </div>
+    <div id="scan-result-msg" style="display:none;padding:12px 20px;border-top:1px solid rgba(255,255,255,0.06);font-size:0.85rem;"></div>
+  </div>
+
+  <!-- Compte test + Notification test -->
+  <div class="admin-two-col" style="margin-top:24px;">
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-title">🧪 Compte de test</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.3);">Pour vérifier le robot</span>
+      </div>
+      <div style="padding:20px;">
+        <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:16px;">Crée un utilisateur <code style="color:#93C5FD;">test@rdvprefecturefacile.fr</code> avec 3 alertes (Paris, Lyon, Marseille) et un abonnement actif simulé.</p>
+        <button onclick="createTestData()" class="btn btn-primary btn-sm" style="width:100%;font-size:0.85rem;padding:12px;">Créer compte test</button>
+        <div id="test-data-result" style="margin-top:12px;display:none;"></div>
+        <div id="test-credentials" style="display:none;margin-top:12px;background:rgba(15,164,122,0.1);border:1px solid rgba(15,164,122,0.2);border-radius:8px;padding:14px;">
+          <div style="font-size:0.78rem;color:var(--green);font-weight:700;margin-bottom:8px;">✅ Compte test créé</div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.7);">Email : <strong style="color:#fff;">test@rdvprefecturefacile.fr</strong></div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.7);">Mot de passe : <strong style="color:#fff;">Test1234!</strong></div>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;" id="test-user-actions"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-title">📬 Test notification</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.3);">Vérifie email + SMS</span>
+      </div>
+      <div style="padding:20px;">
+        <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:16px;">Envoie une notification simulée (créneau fictif) à un utilisateur pour tester le pipeline SMS + email.</p>
+        <div style="margin-bottom:12px;">
+          <label style="color:rgba(255,255,255,0.5);font-size:0.78rem;display:block;margin-bottom:6px;">User ID (depuis le tableau ci-dessus)</label>
+          <input id="notif-user-id" type="text" placeholder="UUID de l'utilisateur" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:0.82rem;box-sizing:border-box;">
+        </div>
+        <button onclick="sendTestNotification()" class="btn btn-secondary btn-sm" style="width:100%;font-size:0.85rem;padding:12px;background:rgba(27,79,216,0.2);border-color:rgba(27,79,216,0.4);color:#93C5FD;">Envoyer notification test</button>
+        <div id="notif-result" style="margin-top:12px;display:none;"></div>
+      </div>
+    </div>
+
+  </div>
+
   <!-- Alertes actives + Santé système -->
-  <div class="admin-two-col">
+  <div class="admin-two-col" style="margin-top:24px;">
 
     <div class="admin-card">
       <div class="admin-card-header">
@@ -468,35 +537,35 @@
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
           <div>
             <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">🤖 Robot de surveillance</div>
-            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Dernier scan : il y a 47 secondes</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);" id="robot-uptime-label">Toutes les 45 secondes</div>
           </div>
           <span class="status-pill status-active">Actif</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
           <div>
-            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">📱 Passerelle SMS (Twilio)</div>
-            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Livraison : 99,2% — Latence : 1,2s</div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">📱 SMS (Twilio)</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Vérification en attente</div>
           </div>
-          <span class="status-pill status-active">Actif</span>
+          <span class="status-pill status-pending">En attente</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
           <div>
             <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">📧 Email (SendGrid)</div>
-            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Taux d'ouverture : 68% — Livraison : 99,8%</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Alertes + bienvenue + reset</div>
           </div>
           <span class="status-pill status-active">Actif</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
           <div>
-            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">💳 Paiements (Stripe)</div>
-            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Taux succès : 98,7% — 0 litige en cours</div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">💳 Paiements (Stripe Live)</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Mode production activé</div>
           </div>
           <span class="status-pill status-active">Actif</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(15,164,122,0.08);border-radius:var(--radius-sm);border:1px solid rgba(15,164,122,0.2);">
           <div>
-            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">🌐 Serveur (Uptime)</div>
-            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">99,98% uptime — Temps réponse : 142ms</div>
+            <div style="font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.8);">🌐 Serveur (Railway)</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Node 20 — Europe ouest</div>
           </div>
           <span class="status-pill status-active">Actif</span>
         </div>
@@ -577,6 +646,89 @@ function showLoginOverlay() {
   });
 }
 
+/* ── Robot / cron status ── */
+async function loadRobotStatus() {
+  const d = await adminFetch('/api/admin/cron-status');
+  if (!d) return;
+
+  document.getElementById('robot-total-scans').textContent = d.totalScans;
+  document.getElementById('robot-alert-count').textContent = d.lastAlertCount;
+  document.getElementById('robot-slots-found').textContent = d.lastSlotsFound;
+  document.getElementById('robot-last-scan').textContent   = d.lastScanAt
+    ? new Date(d.lastScanAt).toLocaleTimeString('fr-FR')
+    : 'En attente…';
+  document.getElementById('robot-uptime-label').textContent = `Toutes les ${d.intervalSeconds}s`;
+
+  const badge = document.getElementById('robot-status-badge');
+  badge.innerHTML = `<div style="width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;"></div> ${d.running ? 'Scan en cours' : 'Actif'}`;
+}
+
+async function triggerScan() {
+  const btn = document.getElementById('btn-trigger-scan');
+  const msg = document.getElementById('scan-result-msg');
+  btn.disabled = true;
+  btn.textContent = '⏳ Scan en cours…';
+  msg.style.display = 'none';
+
+  const res = await fetch(API + '/api/admin/trigger-scan', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + getAdminToken() }
+  });
+  const data = await res.json();
+  msg.style.display = 'block';
+  msg.style.color = res.ok ? 'var(--green)' : 'var(--red)';
+  msg.textContent = res.ok ? '✅ Scan lancé — vérifiez les logs Railway dans 30s.' : data.error;
+  btn.disabled = false;
+  btn.textContent = '⚡ Lancer un scan';
+  setTimeout(loadRobotStatus, 5000);
+}
+
+async function createTestData() {
+  const btn   = document.querySelector('[onclick="createTestData()"]');
+  const result = document.getElementById('test-data-result');
+  const creds  = document.getElementById('test-credentials');
+  btn.disabled = true;
+  btn.textContent = 'Création…';
+
+  const res = await fetch(API + '/api/admin/create-test-data', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + getAdminToken() }
+  });
+  const data = await res.json();
+  btn.disabled = false;
+  btn.textContent = 'Créer compte test';
+
+  if (res.ok) {
+    creds.style.display = 'block';
+    result.style.display = 'none';
+    document.getElementById('test-user-actions').innerHTML = `
+      <button onclick="document.getElementById('notif-user-id').value='${data.userId}'" class="btn btn-secondary btn-sm" style="font-size:0.75rem;background:rgba(27,79,216,0.2);border-color:rgba(27,79,216,0.3);color:#93C5FD;">Utiliser pour test notif</button>`;
+  } else {
+    result.style.display = 'block';
+    result.style.cssText = 'margin-top:12px;color:var(--red);font-size:0.82rem;';
+    result.textContent = data.error;
+  }
+}
+
+async function sendTestNotification() {
+  const userId = document.getElementById('notif-user-id').value.trim();
+  const result = document.getElementById('notif-result');
+  if (!userId) { result.style.display='block'; result.style.color='var(--red)'; result.textContent='Entrez un User ID.'; return; }
+
+  result.style.display = 'block';
+  result.style.color   = 'rgba(255,255,255,0.5)';
+  result.textContent   = 'Envoi en cours…';
+
+  const res = await fetch(API + '/api/admin/test-notification', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + getAdminToken(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId })
+  });
+  const data = await res.json();
+  result.style.color = res.ok ? 'var(--green)' : 'var(--red)';
+  result.textContent = res.ok ? '✅ ' + data.message : '❌ ' + data.error;
+}
+
 /* ── Charger les vraies données ── */
 async function loadDashboard() {
   const [stats, usersData] = await Promise.all([
@@ -642,6 +794,8 @@ if (!getAdminToken()) {
   showLoginOverlay();
 } else {
   loadDashboard();
+  loadRobotStatus();
+  setInterval(loadRobotStatus, 30000);
 }
 </script>
 </body>
