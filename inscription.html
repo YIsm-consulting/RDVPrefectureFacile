@@ -241,13 +241,21 @@
         last_name:  document.getElementById('nom').value.trim(),
         phone:      document.getElementById('tel').value.trim()
       });
-      window.location.href = 'paiement.html';
+      btn.textContent = '✓ Compte créé !';
+      btn.style.background = 'var(--green)';
+      const ok = document.createElement('div');
+      ok.style.cssText = 'background:#D1FAE5;border:1px solid #6EE7B7;border-radius:8px;padding:16px;margin-top:16px;text-align:center;';
+      ok.innerHTML = '<p style="color:#065F46;font-weight:700;margin:0 0 4px;">✓ Votre compte est créé !</p><p style="color:#065F46;font-size:0.85rem;margin:0;">Un email de confirmation vous a été envoyé. Redirection vers le paiement…</p>';
+      e.target.appendChild(ok);
+      setTimeout(() => { window.location.href = 'paiement.html'; }, 2500);
     } catch (error) {
       btn.disabled = false;
-      btn.textContent = 'Continuer → Choisir ma formule';
+      btn.textContent = 'Créer mon compte → Paiement sécurisé';
+      const existing = document.getElementById('inscription-error');
+      if (existing) existing.remove();
       const msg = document.createElement('p');
       msg.id = 'inscription-error';
-      msg.style.cssText = 'color:red;font-size:0.85rem;margin-top:12px;text-align:center;';
+      msg.style.cssText = 'color:red;font-size:0.85rem;margin-top:12px;text-align:center;font-weight:600;';
       msg.textContent = error.message;
       e.target.appendChild(msg);
     }
