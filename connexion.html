@@ -11,6 +11,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <!-- Fin Google Analytics -->
 </head>
 <body>
 
@@ -37,7 +46,7 @@
       </div>
       <div class="auth-divider"><span>ou avec votre email</span></div>
 
-      <form>
+      <form id="login-form">
         <div class="form-group">
           <label class="form-label" for="email-login">Email</label>
           <input class="form-input" type="email" id="email-login" placeholder="votre@email.fr" required>
@@ -57,6 +66,33 @@
   </div>
 </section>
 
+<script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('[type="submit"]');
+    const err = document.getElementById('login-error');
+    btn.disabled = true;
+    btn.textContent = 'Connexion…';
+    if (err) err.remove();
+
+    try {
+      await API.login({
+        email:    document.getElementById('email-login').value.trim(),
+        password: document.getElementById('password-login').value
+      });
+      window.location.href = 'tableau-de-bord.html';
+    } catch (error) {
+      btn.disabled = false;
+      btn.textContent = 'Se connecter →';
+      const msg = document.createElement('p');
+      msg.id = 'login-error';
+      msg.style.cssText = 'color:red;font-size:0.85rem;margin-top:12px;text-align:center;';
+      msg.textContent = error.message;
+      e.target.appendChild(msg);
+    }
+  });
+</script>
 </body>
 </html>

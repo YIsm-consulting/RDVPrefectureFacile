@@ -58,6 +58,15 @@
       .dashboard-sidebar { position: static; }
     }
   </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <!-- Fin Google Analytics -->
 </head>
 <body>
 
@@ -269,6 +278,89 @@
   </div>
 </section>
 
+<script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+(async () => {
+  API.requireAuth();
+
+  /* Message de succès paiement */
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('paiement') === 'ok') {
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:var(--green);color:white;text-align:center;padding:12px;font-weight:600;font-size:0.9rem;';
+    banner.textContent = '✓ Paiement confirmé ! Votre alerte est maintenant active.';
+    document.body.prepend(banner);
+    setTimeout(() => banner.remove(), 5000);
+  }
+
+  try {
+    const { user, subscription, alertsCount } = await API.getMe();
+    const alerts = await API.getAlerts();
+
+    /* Nom utilisateur */
+    const initiales = ((user.first_name || '')[0] || '') + ((user.last_name || '')[0] || '');
+    document.querySelector('.sidebar-avatar').textContent = initiales.toUpperCase() || '?';
+    document.querySelector('.sidebar-name').textContent = [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email;
+    document.querySelector('.sidebar-plan').textContent = subscription ? '✓ Formule Intégrale' : 'Sans abonnement';
+
+    /* Bonjour */
+    document.querySelector('h1').textContent = `Bonjour, ${user.first_name || 'vous'} 👋`;
+
+    /* Si pas d'abonnement → proposer paiement */
+    if (!subscription) {
+      document.querySelector('.alert-status-card').innerHTML = `
+        <div style="text-align:center;padding:32px;">
+          <p style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">Aucun abonnement actif</p>
+          <p style="color:var(--gray-500);margin-bottom:24px;">Activez votre abonnement pour créer des alertes et être notifié dès qu'un créneau se libère.</p>
+          <button id="btn-subscribe" class="btn btn-primary btn-lg">🔔 Activer mon alerte — 29,90€/mois</button>
+        </div>`;
+      document.getElementById('btn-subscribe').addEventListener('click', async () => {
+        document.getElementById('btn-subscribe').textContent = 'Redirection…';
+        await API.redirectToCheckout();
+      });
+      return;
+    }
+
+    /* Afficher alertes */
+    const alertCard = document.querySelector('.alert-status-card');
+    if (alerts.length === 0) {
+      alertCard.innerHTML = `
+        <p style="text-align:center;color:var(--gray-500);padding:24px 0;">Aucune alerte configurée.</p>`;
+    } else {
+      const a = alerts[0];
+      alertCard.querySelector('.alert-info-grid').innerHTML = `
+        <div class="alert-info-item"><div class="alert-info-label">Préfecture</div><div class="alert-info-value">${a.prefecture}</div></div>
+        <div class="alert-info-item"><div class="alert-info-label">Démarche</div><div class="alert-info-value">${a.demarche}</div></div>
+        <div class="alert-info-item"><div class="alert-info-label">Canal Email</div><div class="alert-info-value">${user.email}</div></div>
+        <div class="alert-info-item"><div class="alert-info-label">Statut</div><div class="alert-info-value">${a.active ? 'Active' : 'Inactive'}</div></div>`;
+
+      alertCard.querySelector('button[style*="red"]').addEventListener('click', async () => {
+        if (!confirm('Désactiver cette alerte ?')) return;
+        await API.deleteAlert(a.id);
+        location.reload();
+      });
+    }
+
+    /* Abonnement - portail Stripe */
+    document.querySelector('button[style*="red"]:last-of-type')?.addEventListener('click', async () => {
+      await API.redirectToPortal();
+    });
+
+  } catch (err) {
+    if (err.message.includes('Token')) API.logout();
+  }
+
+  /* Déconnexion */
+  document.querySelector('.sidebar-link[href="connexion.html"]')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    API.logout();
+  });
+  document.querySelector('.navbar-actions a[href="connexion.html"]')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    API.logout();
+  });
+})();
+</script>
 </body>
 </html>

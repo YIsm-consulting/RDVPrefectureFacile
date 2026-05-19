@@ -12,6 +12,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <!-- Fin Google Analytics -->
 </head>
 <body>
 
@@ -126,6 +135,36 @@
   </div>
 </section>
 
+<script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+  document.getElementById('inscription-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('[type="submit"]');
+    const err = document.getElementById('inscription-error');
+    btn.disabled = true;
+    btn.textContent = 'Création du compte…';
+    if (err) err.remove();
+
+    try {
+      await API.register({
+        email:      document.getElementById('email-inscription').value.trim(),
+        password:   document.getElementById('password').value,
+        first_name: document.getElementById('prenom').value.trim(),
+        last_name:  document.getElementById('nom').value.trim(),
+        phone:      document.getElementById('tel').value.trim()
+      });
+      window.location.href = 'paiement.html';
+    } catch (error) {
+      btn.disabled = false;
+      btn.textContent = 'Continuer → Choisir ma formule';
+      const msg = document.createElement('p');
+      msg.id = 'inscription-error';
+      msg.style.cssText = 'color:red;font-size:0.85rem;margin-top:12px;text-align:center;';
+      msg.textContent = error.message;
+      e.target.appendChild(msg);
+    }
+  });
+</script>
 </body>
 </html>

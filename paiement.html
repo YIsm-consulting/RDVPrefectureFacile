@@ -11,6 +11,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <!-- Fin Google Analytics -->
 </head>
 <body>
 
@@ -46,38 +55,11 @@
         <h2 style="font-size:1.4rem;margin-bottom:6px;">Informations de paiement</h2>
         <p style="color:var(--gray-500);font-size:0.88rem;margin-bottom:28px;">Traité de façon sécurisée par Stripe — vos données bancaires ne transitent pas par nos serveurs.</p>
 
-        <form id="payment-form">
-          <div class="form-group">
-            <label class="form-label">Numéro de carte</label>
-            <input class="form-input" type="text" placeholder="1234 5678 9012 3456" maxlength="19">
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <div class="form-group">
-              <label class="form-label">Date d'expiration</label>
-              <input class="form-input" type="text" placeholder="MM / AA" maxlength="7">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Code CVV</label>
-              <input class="form-input" type="text" placeholder="123" maxlength="4">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nom sur la carte</label>
-            <input class="form-input" type="text" placeholder="PRÉNOM NOM">
-          </div>
-
-          <div class="card-icons" style="margin-bottom:20px;">
-            <div class="card-icon">VISA</div>
-            <div class="card-icon">MC</div>
-            <div class="card-icon">AMEX</div>
-            <span style="font-size:0.75rem;color:var(--gray-500);">Cartes acceptées</span>
-          </div>
-
-          <button type="submit" class="btn btn-primary form-submit btn-lg" style="background:var(--green);box-shadow:0 4px 14px rgba(15,164,122,0.30);">
-            🔒 Confirmer et activer mon alerte — 29,90 €/mois
-          </button>
-          <p class="form-note" style="margin-top:14px;">Satisfait ou remboursé 14 jours • Résiliation en 1 clic • Aucun engagement</p>
-        </form>
+        <div id="payment-loading" style="text-align:center;padding:40px 0;">
+          <p style="font-size:1rem;color:var(--gray-600);margin-bottom:16px;">Redirection vers le paiement sécurisé Stripe…</p>
+          <div style="display:inline-block;width:32px;height:32px;border:3px solid var(--gray-200);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+        </div>
+        <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
       </div>
 
       <!-- Récapitulatif -->
@@ -134,6 +116,22 @@
   </div>
 </section>
 
+<script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+  (async () => {
+    if (!API.getToken()) {
+      window.location.href = 'inscription.html';
+      return;
+    }
+    try {
+      await API.redirectToCheckout();
+    } catch (err) {
+      document.getElementById('payment-loading').innerHTML =
+        `<p style="color:red;">Erreur : ${err.message}</p>
+         <a href="connexion.html" class="btn btn-primary" style="margin-top:16px;">Se reconnecter</a>`;
+    }
+  })();
+</script>
 </body>
 </html>
