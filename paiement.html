@@ -40,8 +40,8 @@
     <!-- Progress bar -->
     <div style="max-width:760px;margin:0 auto 40px;">
       <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-        <span style="font-size:0.78rem;font-weight:600;color:var(--blue);">Étape 3/3 — Paiement</span>
-        <span style="font-size:0.78rem;color:var(--green);font-weight:600;">✓ Compte créé · ✓ Alerte configurée</span>
+        <span style="font-size:0.78rem;font-weight:600;color:var(--blue);">Étape 2/2 — Paiement</span>
+        <span style="font-size:0.78rem;color:var(--green);font-weight:600;">✓ Compte créé</span>
       </div>
       <div style="height:4px;background:var(--gray-100);border-radius:99px;">
         <div style="height:100%;width:100%;background:var(--blue);border-radius:99px;"></div>
@@ -121,7 +121,7 @@
 <script>
   (async () => {
     if (!API.getToken()) {
-      window.location.href = 'inscription.html';
+      window.location.href = 'connexion.html';
       return;
     }
     try {
