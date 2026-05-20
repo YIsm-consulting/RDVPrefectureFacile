@@ -225,7 +225,7 @@
 
   <div class="admin-nav-label">Marketing</div>
   <a class="admin-nav-item"><span class="icon">📧</span> Emails</a>
-  <a class="admin-nav-item"><span class="icon">📝</span> Blog</a>
+  <a class="admin-nav-item" id="nav-blog" onclick="showPanel('blog')" style="cursor:pointer;"><span class="icon">📝</span> Blog</a>
 
   <div class="admin-nav-label">Paramètres</div>
   <a class="admin-nav-item"><span class="icon">⚙️</span> Configuration</a>
@@ -243,6 +243,8 @@
 
 <!-- Contenu principal -->
 <main class="admin-main">
+
+<div id="panel-dashboard">
 
   <!-- Topbar -->
   <div class="admin-topbar">
@@ -574,6 +576,72 @@
 
   </div>
 
+</div><!-- #panel-dashboard -->
+
+  <!-- Panel Blog (masqué par défaut) -->
+  <div id="panel-blog" style="display:none;">
+
+    <div class="admin-topbar">
+      <div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Marketing</div>
+        <div class="admin-page-title">Blog automatisé</div>
+      </div>
+      <div class="admin-topbar-right">
+        <a href="../blog/index.html" target="_blank" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">Voir le blog →</a>
+      </div>
+    </div>
+
+    <!-- Générer un article -->
+    <div class="admin-card" style="margin-bottom:24px;">
+      <div class="admin-card-header">
+        <span class="admin-card-title">✨ Générer un article avec l'IA</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.3);">Claude Haiku · ~10 secondes</span>
+      </div>
+      <div style="padding:20px;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:flex-end;">
+        <div>
+          <label style="color:rgba(255,255,255,0.5);font-size:0.78rem;display:block;margin-bottom:6px;">Sujet de l'article</label>
+          <input id="blog-topic" type="text" placeholder="Ex: Comment préparer son dossier de naturalisation en 2026" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:0.88rem;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="color:rgba(255,255,255,0.5);font-size:0.78rem;display:block;margin-bottom:6px;">Catégorie</label>
+          <select id="blog-category" style="padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:0.88rem;cursor:pointer;">
+            <option value="Guides pratiques">Guides pratiques</option>
+            <option value="Actualités 2026">Actualités 2026</option>
+            <option value="Titre de séjour">Titre de séjour</option>
+            <option value="Naturalisation">Naturalisation</option>
+            <option value="Conseils">Conseils</option>
+          </select>
+        </div>
+        <button id="btn-generate" onclick="generateArticle()" class="btn btn-primary" style="padding:10px 20px;white-space:nowrap;">Générer</button>
+      </div>
+      <div id="generate-result" style="display:none;padding:12px 20px;border-top:1px solid rgba(255,255,255,0.06);font-size:0.85rem;"></div>
+    </div>
+
+    <!-- Liste des articles -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-title">Articles</span>
+        <button onclick="loadBlogPosts()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button>
+      </div>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Catégorie</th>
+            <th>Statut</th>
+            <th>Créé le</th>
+            <th>Lecture</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="blog-posts-tbody">
+          <tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
 </main>
 
 <script>
@@ -787,6 +855,108 @@ async function loadDashboard() {
     logoutBtn.onclick = adminLogout;
     footer.parentNode.insertBefore(logoutBtn, footer);
   }
+}
+
+/* ── Panel switching ── */
+function showPanel(name) {
+  document.getElementById('panel-dashboard').style.display = name === 'dashboard' ? '' : 'none';
+  document.getElementById('panel-blog').style.display      = name === 'blog'      ? 'block' : 'none';
+
+  document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active'));
+  if (name === 'blog') {
+    document.getElementById('nav-blog').classList.add('active');
+    loadBlogPosts();
+  }
+}
+
+/* ── Blog ── */
+async function loadBlogPosts() {
+  const tbody = document.getElementById('blog-posts-tbody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:24px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/blog/list');
+  if (!data) return;
+
+  if (!data.posts || data.posts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun article. Générez votre premier article ci-dessus.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.posts.map(p => {
+    const date    = new Date(p.created_at).toLocaleDateString('fr-FR');
+    const pubBtn  = p.status === 'published'
+      ? `<button onclick="togglePublish('${p.id}','draft')" class="btn btn-ghost btn-sm" style="color:#FBBF24;font-size:0.75rem;padding:4px 10px;">Dépublier</button>`
+      : `<button onclick="togglePublish('${p.id}','published')" class="btn btn-ghost btn-sm" style="color:#34D399;font-size:0.75px;padding:4px 10px;font-size:0.75rem;">Publier</button>`;
+    const previewUrl = `https://www.rdvprefecturefacile.fr/blog/article.html?slug=${p.slug}`;
+    return `<tr>
+      <td>
+        <div style="font-weight:600;color:var(--white);max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.title}</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);">${p.slug}</div>
+      </td>
+      <td style="font-size:0.82rem;">${p.category}</td>
+      <td><span class="status-pill ${p.status === 'published' ? 'status-active' : 'status-pending'}">${p.status === 'published' ? 'Publié' : 'Brouillon'}</span></td>
+      <td style="font-size:0.82rem;">${date}</td>
+      <td style="font-size:0.82rem;">${p.reading_time} min</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${pubBtn}
+        <a href="${previewUrl}" target="_blank" class="btn btn-ghost btn-sm" style="color:#60A5FA;font-size:0.75rem;padding:4px 10px;">Voir</a>
+        <button onclick="deletePost('${p.id}')" class="btn btn-ghost btn-sm" style="color:#F87171;font-size:0.75rem;padding:4px 10px;">Supprimer</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function generateArticle() {
+  const topic    = document.getElementById('blog-topic').value.trim();
+  const category = document.getElementById('blog-category').value;
+  const btn      = document.getElementById('btn-generate');
+  const result   = document.getElementById('generate-result');
+
+  if (!topic) { alert('Entrez un sujet pour l\'article.'); return; }
+
+  btn.disabled     = true;
+  btn.textContent  = '⏳ Génération…';
+  result.style.display = 'none';
+
+  const res = await fetch(API + '/api/admin/blog/generate', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + getAdminToken(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topic, category })
+  });
+  const data = await res.json();
+
+  btn.disabled    = false;
+  btn.textContent = 'Générer';
+  result.style.display = 'block';
+
+  if (res.ok) {
+    result.style.color = 'var(--green)';
+    result.innerHTML   = `✅ Article "<strong style="color:#fff;">${data.post.title}</strong>" créé en brouillon. <a href="https://www.rdvprefecturefacile.fr/blog/article.html?slug=${data.post.slug}" target="_blank" style="color:#60A5FA;">Aperçu →</a>`;
+    document.getElementById('blog-topic').value = '';
+    loadBlogPosts();
+  } else {
+    result.style.color = 'var(--red)';
+    result.textContent = '❌ ' + (data.error || 'Erreur inconnue');
+  }
+}
+
+async function togglePublish(id, status) {
+  const res = await fetch(API + `/api/admin/blog/publish/${id}`, {
+    method: 'PUT',
+    headers: { 'Authorization': 'Bearer ' + getAdminToken(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
+  });
+  if (res.ok) loadBlogPosts();
+  else alert('Erreur lors du changement de statut.');
+}
+
+async function deletePost(id) {
+  if (!confirm('Supprimer cet article définitivement ?')) return;
+  const res = await fetch(API + `/api/admin/blog/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + getAdminToken() }
+  });
+  if (res.ok) loadBlogPosts();
+  else alert('Erreur lors de la suppression.');
 }
 
 /* ── Init ── */

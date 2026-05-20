@@ -67,6 +67,15 @@
 <section class="section">
   <div class="container">
 
+    <!-- Articles générés par IA -->
+    <div id="ai-articles-section" style="display:none;margin-bottom:48px;">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+        <h2 style="font-size:1.5rem;margin:0;">Derniers articles</h2>
+        <span class="tag" style="background:#EFF6FF;color:var(--blue);">Nouveau</span>
+      </div>
+      <div id="ai-articles-grid" class="blog-grid"></div>
+    </div>
+
     <!-- Filtres catégories -->
     <div class="faq-categories" style="margin-bottom:40px;">
       <button class="faq-cat-btn active">Tous les articles</button>
@@ -349,5 +358,43 @@
   </div>
 </footer>
 <script src="../assets/js/main.js"></script>
+<script>
+const BLOG_API = 'https://rdvprefecturefacile-backend-production.up.railway.app';
+const EMOJIS   = ['📄','🏛️','🇫🇷','📋','⚡','🪪','🎓','🔄','🚨','📝','⏳','🔔'];
+
+function emoji() { return EMOJIS[Math.floor(Math.random() * EMOJIS.length)]; }
+
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' });
+}
+
+async function loadAIArticles() {
+  try {
+    const res  = await fetch(`${BLOG_API}/api/blog/posts`);
+    if (!res.ok) return;
+    const { posts } = await res.json();
+    if (!posts || posts.length === 0) return;
+
+    const grid = document.getElementById('ai-articles-grid');
+    grid.innerHTML = posts.map(p => `
+      <div class="blog-card">
+        <div class="blog-img">${emoji()}</div>
+        <div class="blog-content">
+          <div class="blog-cat">${p.category}</div>
+          <h3 class="blog-title">${p.title}</h3>
+          <p class="blog-excerpt">${p.excerpt}</p>
+          <div class="blog-meta">
+            <span>${fmtDate(p.published_at)} · ${p.reading_time} min</span>
+            <a href="article.html?slug=${p.slug}" class="blog-read-more">Lire →</a>
+          </div>
+        </div>
+      </div>`).join('');
+
+    document.getElementById('ai-articles-section').style.display = 'block';
+  } catch { /* silencieux si le backend est indisponible */ }
+}
+
+loadAIArticles();
+</script>
 </body>
 </html>

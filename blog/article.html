@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Article — RDVPrefectureFacile.fr</title>
+  <meta name="description" id="page-desc" content="">
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <meta name="theme-color" content="#1B4FD8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <base href="/blog/">
+  <style>
+    .article-body { max-width: 760px; margin: 0 auto; }
+    .article-body h2 { font-size: 1.4rem; margin: 2rem 0 1rem; color: var(--gray-900); }
+    .article-body h3 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; color: var(--gray-900); }
+    .article-body p  { color: var(--gray-500); line-height: 1.8; margin-bottom: 1rem; }
+    .article-body ul, .article-body ol { color: var(--gray-500); line-height: 1.8; margin: 0 0 1rem 1.5rem; }
+    .article-body li { margin-bottom: 0.4rem; }
+    .article-body strong { color: var(--gray-900); }
+    .article-body blockquote { border-left: 4px solid var(--blue); padding: 1rem 1.5rem; background: var(--blue-light); border-radius: 0 8px 8px 0; margin: 1.5rem 0; }
+    .article-body blockquote p { color: var(--blue); font-weight: 600; margin: 0; }
+    .article-cta { background: linear-gradient(135deg, var(--blue) 0%, #0F3499 100%); border-radius: var(--radius-lg); padding: 40px; text-align: center; margin-top: 48px; }
+    .article-cta h3 { color: var(--white); margin-bottom: 12px; }
+    .article-cta p  { color: rgba(255,255,255,0.85); margin-bottom: 24px; }
+    #skeleton { animation: pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .skel-line { height: 16px; background: var(--gray-100); border-radius: 4px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo">RDV<span>Prefecture</span><span class="dot">Facile</span></a>
+      <ul class="navbar-nav">
+        <li><a href="../comment-ca-marche.html">Comment ça marche</a></li>
+        <li><a href="../prefectures.html">Préfectures</a></li>
+        <li><a href="../tarifs.html">Tarifs</a></li>
+        <li><a href="index.html" class="active">Blog</a></li>
+        <li><a href="../faq.html">FAQ</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="../connexion.html" class="btn btn-secondary btn-sm">Se connecter</a>
+        <a href="../inscription.html" class="btn btn-primary btn-sm">Créer mon alerte</a>
+      </div>
+      <button class="navbar-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="../comment-ca-marche.html">Comment ça marche</a>
+  <a href="../prefectures.html">Préfectures</a>
+  <a href="../tarifs.html">Tarifs</a>
+  <a href="index.html">Blog</a>
+  <a href="../faq.html">FAQ</a>
+  <a href="../contact.html">Contact</a>
+  <a href="../connexion.html" class="btn btn-secondary">Se connecter</a>
+  <a href="../inscription.html" class="btn btn-primary">Créer mon alerte</a>
+</div>
+
+<div id="page-header" class="page-header" style="display:none;">
+  <div class="container">
+    <div class="breadcrumb"><a href="../index.html">Accueil</a><span>›</span><a href="index.html">Blog</a><span>›</span><span id="bc-category"></span></div>
+    <div id="article-category" class="blog-cat" style="margin-bottom:12px;"></div>
+    <h1 id="article-title" style="max-width:800px;"></h1>
+    <p id="article-excerpt" style="max-width:660px;"></p>
+    <div id="article-meta" style="margin-top:20px;font-size:0.85rem;color:var(--gray-300);"></div>
+  </div>
+</div>
+
+<!-- Skeleton loader -->
+<div id="skeleton" class="page-header">
+  <div class="container">
+    <div class="skel-line" style="width:200px;"></div>
+    <div class="skel-line" style="width:80%;height:28px;margin-top:16px;"></div>
+    <div class="skel-line" style="width:60%;"></div>
+    <div class="skel-line" style="width:120px;"></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Skeleton body -->
+    <div id="skeleton-body" class="article-body" style="animation: pulse 1.5s ease-in-out infinite;">
+      <div class="skel-line" style="width:100%;height:14px;"></div>
+      <div class="skel-line" style="width:95%;height:14px;"></div>
+      <div class="skel-line" style="width:88%;height:14px;"></div>
+      <div class="skel-line" style="width:50%;height:20px;margin-top:24px;"></div>
+      <div class="skel-line" style="width:100%;height:14px;"></div>
+      <div class="skel-line" style="width:93%;height:14px;"></div>
+      <div class="skel-line" style="width:97%;height:14px;"></div>
+    </div>
+
+    <div id="article-body" class="article-body" style="display:none;"></div>
+
+    <div id="not-found" style="display:none;text-align:center;padding:80px 0;">
+      <div style="font-size:3rem;margin-bottom:16px;">😕</div>
+      <h2>Article introuvable</h2>
+      <p style="color:var(--gray-500);margin-bottom:24px;">Cet article n'existe pas ou n'est plus disponible.</p>
+      <a href="index.html" class="btn btn-primary">Voir tous les articles</a>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">RDV<span>Prefecture</span><span class="dot">Facile</span></div>
+        <p class="footer-desc">Le service d'alertes automatiques pour vos rendez-vous en préfecture.</p>
+      </div>
+      <div>
+        <div class="footer-title">Services</div>
+        <a href="../comment-ca-marche.html">Comment ça marche</a>
+        <a href="../prefectures.html">Préfectures couvertes</a>
+        <a href="../tarifs.html">Tarifs</a>
+      </div>
+      <div>
+        <div class="footer-title">Ressources</div>
+        <a href="index.html">Blog</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../contact.html">Contact</a>
+      </div>
+      <div>
+        <div class="footer-title">Légal</div>
+        <a href="../mentions-legales.html">Mentions légales</a>
+        <a href="../politique-confidentialite.html">Confidentialité</a>
+        <a href="../cgv.html">CGV</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 RDVPrefectureFacile.fr — Tous droits réservés</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const API = 'https://rdvprefecturefacile-backend-production.up.railway.app';
+
+const params = new URLSearchParams(location.search);
+const slug   = params.get('slug');
+
+if (!slug) {
+  showNotFound();
+} else {
+  loadArticle(slug);
+}
+
+async function loadArticle(slug) {
+  try {
+    const res  = await fetch(`${API}/api/blog/posts/${slug}`);
+    if (!res.ok) { showNotFound(); return; }
+    const { post } = await res.json();
+    renderArticle(post);
+  } catch {
+    showNotFound();
+  }
+}
+
+function renderArticle(post) {
+  document.getElementById('page-title').textContent = post.title + ' — RDVPrefectureFacile.fr';
+  document.getElementById('page-desc').content      = post.excerpt;
+
+  document.getElementById('bc-category').textContent      = post.category;
+  document.getElementById('article-category').textContent = post.category;
+  document.getElementById('article-title').textContent    = post.title;
+  document.getElementById('article-excerpt').textContent  = post.excerpt;
+
+  const date = new Date(post.published_at).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+  document.getElementById('article-meta').textContent = `${date} · ${post.reading_time} min de lecture`;
+
+  document.getElementById('article-body').innerHTML = post.content + `
+    <div class="article-cta">
+      <h3>Ne ratez plus jamais un créneau disponible</h3>
+      <p>RDVPrefectureFacile.fr surveille les disponibilités toutes les 45 secondes et vous alerte instantanément par SMS et email.</p>
+      <a href="../inscription.html" class="btn btn-white" style="background:#fff;color:var(--blue);font-weight:700;padding:14px 28px;border-radius:8px;text-decoration:none;display:inline-block;">Créer mon alerte gratuitement →</a>
+    </div>`;
+
+  document.getElementById('skeleton').style.display      = 'none';
+  document.getElementById('skeleton-body').style.display = 'none';
+  document.getElementById('page-header').style.display   = 'block';
+  document.getElementById('article-body').style.display  = 'block';
+}
+
+function showNotFound() {
+  document.getElementById('skeleton').style.display      = 'none';
+  document.getElementById('skeleton-body').style.display = 'none';
+  document.getElementById('not-found').style.display     = 'block';
+}
+</script>
+</body>
+</html>
