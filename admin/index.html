@@ -205,30 +205,30 @@
   <div class="admin-logo">RDV<span>Prefecture</span>Facile <br><small style="font-weight:400;color:rgba(255,255,255,0.3);font-size:0.65rem;">ADMINISTRATION</small></div>
 
   <div class="admin-nav-label">Vue générale</div>
-  <a class="admin-nav-item active"><span class="icon">📊</span> Dashboard</a>
-  <a class="admin-nav-item"><span class="icon">💰</span> Revenus</a>
+  <a class="admin-nav-item active" id="nav-dashboard" onclick="showPanel('dashboard')" style="cursor:pointer;"><span class="icon">📊</span> Dashboard</a>
+  <a class="admin-nav-item" id="nav-revenus" onclick="showPanel('revenus')" style="cursor:pointer;"><span class="icon">💰</span> Revenus</a>
 
   <div class="admin-nav-label">Utilisateurs</div>
-  <a class="admin-nav-item"><span class="icon">👥</span> Abonnés</a>
-  <a class="admin-nav-item"><span class="icon">🔔</span> Alertes actives</a>
-  <a class="admin-nav-item"><span class="icon">📱</span> SMS envoyés</a>
+  <a class="admin-nav-item" id="nav-abonnes" onclick="showPanel('abonnes')" style="cursor:pointer;"><span class="icon">👥</span> Abonnés</a>
+  <a class="admin-nav-item" id="nav-alertes" onclick="showPanel('alertes')" style="cursor:pointer;"><span class="icon">🔔</span> Alertes actives</a>
+  <a class="admin-nav-item" id="nav-sms" onclick="showPanel('sms')" style="cursor:pointer;"><span class="icon">📱</span> SMS envoyés</a>
 
   <div class="admin-nav-label">Système</div>
-  <a class="admin-nav-item"><span class="icon">🤖</span> Moniteur robot</a>
-  <a class="admin-nav-item"><span class="icon">🏛️</span> Préfectures</a>
-  <a class="admin-nav-item"><span class="icon">⚠️</span> Logs & erreurs</a>
+  <a class="admin-nav-item" id="nav-robot" onclick="showPanel('robot')" style="cursor:pointer;"><span class="icon">🤖</span> Moniteur robot</a>
+  <a class="admin-nav-item" id="nav-prefectures" onclick="showPanel('prefectures')" style="cursor:pointer;"><span class="icon">🏛️</span> Préfectures</a>
+  <a class="admin-nav-item" id="nav-logs" onclick="showPanel('logs')" style="cursor:pointer;"><span class="icon">⚠️</span> Logs & erreurs</a>
 
   <div class="admin-nav-label">Finances</div>
-  <a class="admin-nav-item"><span class="icon">💳</span> Paiements Stripe</a>
-  <a class="admin-nav-item"><span class="icon">🔄</span> Remboursements</a>
-  <a class="admin-nav-item"><span class="icon">📄</span> Factures</a>
+  <a class="admin-nav-item" id="nav-paiements" onclick="showPanel('paiements')" style="cursor:pointer;"><span class="icon">💳</span> Paiements Stripe</a>
+  <a class="admin-nav-item" id="nav-remboursements" onclick="showPanel('remboursements')" style="cursor:pointer;"><span class="icon">🔄</span> Remboursements</a>
+  <a class="admin-nav-item" id="nav-factures" onclick="showPanel('factures')" style="cursor:pointer;"><span class="icon">📄</span> Factures</a>
 
   <div class="admin-nav-label">Marketing</div>
-  <a class="admin-nav-item"><span class="icon">📧</span> Emails</a>
+  <a class="admin-nav-item" id="nav-emails" onclick="showPanel('emails')" style="cursor:pointer;"><span class="icon">📧</span> Emails</a>
   <a class="admin-nav-item" id="nav-blog" onclick="showPanel('blog')" style="cursor:pointer;"><span class="icon">📝</span> Blog</a>
 
   <div class="admin-nav-label">Paramètres</div>
-  <a class="admin-nav-item"><span class="icon">⚙️</span> Configuration</a>
+  <a class="admin-nav-item" id="nav-config" onclick="showPanel('config')" style="cursor:pointer;"><span class="icon">⚙️</span> Configuration</a>
 
   <div class="admin-sidebar-footer">
     <div class="admin-user">
@@ -640,7 +640,64 @@
       </table>
     </div>
 
+  </div><!-- #panel-blog -->
+
+  <!-- ── Panel Abonnés ── -->
+  <div id="panel-abonnes" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Utilisateurs</div><div class="admin-page-title">Abonnés</div></div><div class="admin-topbar-right"><button onclick="loadAbonnes()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Email</th><th>Téléphone</th><th>Rôle</th><th>Inscrit le</th><th>Stripe</th><th>Actions</th></tr></thead>
+        <tbody id="abonnes-tbody"><tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
   </div>
+
+  <!-- ── Panel Alertes actives ── -->
+  <div id="panel-alertes" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Utilisateurs</div><div class="admin-page-title">Alertes actives</div></div><div class="admin-topbar-right"><button onclick="loadAlertes()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Préfecture</th><th>Démarche</th><th>Créée le</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="alertes-tbody"><tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Panel SMS envoyés ── -->
+  <div id="panel-sms" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Utilisateurs</div><div class="admin-page-title">SMS envoyés</div></div><div class="admin-topbar-right"><button onclick="loadSMS()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Préfecture</th><th>Démarche</th><th>Canal</th><th>Envoyé le</th></tr></thead>
+        <tbody id="sms-tbody"><tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Panel Robot ── -->
+  <div id="panel-robot" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Système</div><div class="admin-page-title">Moniteur robot</div></div><div class="admin-topbar-right"><div id="robot2-badge" class="admin-badge-live"><div style="width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;"></div> Chargement…</div><button onclick="triggerScan2()" class="btn btn-secondary btn-sm" style="background:rgba(27,79,216,0.2);border-color:rgba(27,79,216,0.4);color:#93C5FD;font-size:0.78rem;">⚡ Lancer un scan</button></div></div>
+    <div class="admin-card" style="margin-bottom:24px;">
+      <div style="padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;"><div id="r2-total" style="font-size:1.5rem;font-weight:900;color:var(--white);">—</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Scans effectués</div></div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;"><div id="r2-alerts" style="font-size:1.5rem;font-weight:900;color:var(--white);">—</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Alertes surveillées</div></div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;"><div id="r2-slots" style="font-size:1.5rem;font-weight:900;color:var(--green);">—</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Créneaux trouvés</div></div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:16px;text-align:center;"><div id="r2-last" style="font-size:1.1rem;font-weight:700;color:rgba(255,255,255,0.7);">—</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:4px;">Dernier scan</div></div>
+      </div>
+      <div id="r2-scan-msg" style="display:none;padding:12px 20px;border-top:1px solid rgba(255,255,255,0.06);font-size:0.85rem;"></div>
+    </div>
+  </div>
+
+  <!-- ── Panels placeholder ── -->
+  <div id="panel-revenus" style="display:none;"></div>
+  <div id="panel-prefectures" style="display:none;"></div>
+  <div id="panel-logs" style="display:none;"></div>
+  <div id="panel-paiements" style="display:none;"></div>
+  <div id="panel-remboursements" style="display:none;"></div>
+  <div id="panel-factures" style="display:none;"></div>
+  <div id="panel-emails" style="display:none;"></div>
+  <div id="panel-config" style="display:none;"></div>
 
 </main>
 
@@ -858,15 +915,121 @@ async function loadDashboard() {
 }
 
 /* ── Panel switching ── */
+const ALL_PANELS = ['dashboard','revenus','abonnes','alertes','sms','robot','prefectures','logs','paiements','remboursements','factures','emails','blog','config'];
+
 function showPanel(name) {
-  document.getElementById('panel-dashboard').style.display = name === 'dashboard' ? '' : 'none';
-  document.getElementById('panel-blog').style.display      = name === 'blog'      ? 'block' : 'none';
+  ALL_PANELS.forEach(p => {
+    const el = document.getElementById('panel-' + p);
+    if (el) el.style.display = (p === name) ? 'block' : 'none';
+  });
 
   document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active'));
-  if (name === 'blog') {
-    document.getElementById('nav-blog').classList.add('active');
-    loadBlogPosts();
-  }
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+
+  if (name === 'blog')     loadBlogPosts();
+  if (name === 'abonnes')  loadAbonnes();
+  if (name === 'alertes')  loadAlertes();
+  if (name === 'sms')      loadSMS();
+  if (name === 'robot')    loadRobot2();
+  if (['revenus','prefectures','logs','paiements','remboursements','factures','emails','config'].includes(name)) renderComingSoon(name);
+}
+
+function renderComingSoon(name) {
+  const el = document.getElementById('panel-' + name);
+  if (!el || el.innerHTML.trim()) return;
+  const labels = { revenus:'Revenus', prefectures:'Préfectures', logs:'Logs & erreurs', paiements:'Paiements Stripe', remboursements:'Remboursements', factures:'Factures', emails:'Emails', config:'Configuration' };
+  el.innerHTML = `
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Section</div><div class="admin-page-title">${labels[name]||name}</div></div></div>
+    <div class="admin-card" style="margin-top:0;">
+      <div style="padding:80px;text-align:center;">
+        <div style="font-size:3rem;margin-bottom:16px;">🚧</div>
+        <div style="font-size:1.2rem;font-weight:700;color:var(--white);margin-bottom:8px;">En développement</div>
+        <div style="color:rgba(255,255,255,0.4);font-size:0.9rem;">Cette section sera disponible prochainement.</div>
+      </div>
+    </div>`;
+}
+
+/* ── Abonnés ── */
+async function loadAbonnes() {
+  const tbody = document.getElementById('abonnes-tbody');
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:24px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/users');
+  if (!data) return;
+  if (!data.users?.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun utilisateur.</td></tr>'; return; }
+  tbody.innerHTML = data.users.map(u => `<tr>
+    <td><div style="font-weight:600;color:var(--white);">${u.first_name||''} ${u.last_name||''}</div></td>
+    <td style="font-size:0.82rem;">${u.email}</td>
+    <td style="font-size:0.82rem;">${u.phone||'—'}</td>
+    <td><span class="status-pill ${u.role==='admin'?'status-active':'status-pending'}">${u.role}</span></td>
+    <td style="font-size:0.82rem;">${new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${u.stripe_customer_id||'—'}</td>
+    <td><button onclick="if(confirm('Supprimer cet utilisateur ?')) deleteUser('${u.id}')" class="btn btn-ghost btn-sm" style="color:#F87171;font-size:0.75rem;padding:4px 10px;">Supprimer</button></td>
+  </tr>`).join('');
+}
+
+async function deleteUser(id) {
+  const res = await fetch(API + `/api/admin/users/${id}`, { method:'DELETE', headers:{'Authorization':'Bearer '+getAdminToken()} });
+  if (res.ok) loadAbonnes(); else alert('Erreur suppression.');
+}
+
+/* ── Alertes actives ── */
+async function loadAlertes() {
+  const tbody = document.getElementById('alertes-tbody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:24px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/alerts');
+  if (!data) return;
+  if (!data.alerts?.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune alerte.</td></tr>'; return; }
+  tbody.innerHTML = data.alerts.map(a => `<tr>
+    <td style="font-size:0.82rem;">${a.users?.email||'—'}</td>
+    <td>${a.prefecture}</td>
+    <td style="font-size:0.82rem;">${a.demarche}</td>
+    <td style="font-size:0.82rem;">${new Date(a.created_at).toLocaleDateString('fr-FR')}</td>
+    <td><span class="status-pill ${a.active?'status-active':'status-refund'}">${a.active?'Active':'Inactive'}</span></td>
+    <td><button onclick="if(confirm('Désactiver cette alerte ?')) deactivateAlert('${a.id}')" class="btn btn-ghost btn-sm" style="color:#FBBF24;font-size:0.75rem;padding:4px 10px;">Désactiver</button></td>
+  </tr>`).join('');
+}
+
+async function deactivateAlert(id) {
+  const res = await fetch(API + `/api/admin/alerts/${id}`, { method:'DELETE', headers:{'Authorization':'Bearer '+getAdminToken()} });
+  if (res.ok) loadAlertes(); else alert('Erreur.');
+}
+
+/* ── SMS / Notifications ── */
+async function loadSMS() {
+  const tbody = document.getElementById('sms-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:24px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/notifications');
+  if (!data) return;
+  if (!data.notifications?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune notification.</td></tr>'; return; }
+  tbody.innerHTML = data.notifications.map(n => `<tr>
+    <td style="font-size:0.82rem;">${n.users?.email||'—'}</td>
+    <td style="font-size:0.82rem;">${n.alerts?.prefecture||'—'}</td>
+    <td style="font-size:0.82rem;">${n.alerts?.demarche||'—'}</td>
+    <td><span class="status-pill status-active" style="font-size:0.72rem;">${n.channel||'email'}</span></td>
+    <td style="font-size:0.82rem;">${new Date(n.sent_at).toLocaleString('fr-FR')}</td>
+  </tr>`).join('');
+}
+
+/* ── Robot 2 (panel dédié) ── */
+async function loadRobot2() {
+  const d = await adminFetch('/api/admin/cron-status');
+  if (!d) return;
+  document.getElementById('r2-total').textContent  = d.totalScans;
+  document.getElementById('r2-alerts').textContent = d.lastAlertCount;
+  document.getElementById('r2-slots').textContent  = d.lastSlotsFound;
+  document.getElementById('r2-last').textContent   = d.lastScanAt ? new Date(d.lastScanAt).toLocaleTimeString('fr-FR') : 'En attente…';
+  document.getElementById('robot2-badge').innerHTML = `<div style="width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;"></div> ${d.running?'Scan en cours':'Actif'}`;
+}
+
+async function triggerScan2() {
+  const msg = document.getElementById('r2-scan-msg');
+  const res = await fetch(API+'/api/admin/trigger-scan', { method:'POST', headers:{'Authorization':'Bearer '+getAdminToken()} });
+  const data = await res.json();
+  msg.style.display = 'block';
+  msg.style.color   = res.ok ? 'var(--green)' : 'var(--red)';
+  msg.textContent   = res.ok ? '✅ Scan lancé — résultats dans 30s.' : data.error;
+  setTimeout(loadRobot2, 5000);
 }
 
 /* ── Blog ── */
