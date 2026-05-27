@@ -850,8 +850,20 @@ async function sendTestNotification() {
     body: JSON.stringify({ userId })
   });
   const data = await res.json();
-  result.style.color = res.ok ? 'var(--green)' : 'var(--red)';
-  result.textContent = res.ok ? '✅ ' + data.message : '❌ ' + data.error;
+  if (res.ok) {
+    const details = (data.results || []).map(r => {
+      if (!r) return null;
+      if (r.smsError)   return '❌ SMS : ' + r.smsError;
+      if (r.emailError) return '❌ Email : ' + r.emailError;
+      if (r.sid || r.messageId) return '✅ SMS envoyé';
+      return null;
+    }).filter(Boolean).join(' | ');
+    result.style.color = 'var(--green)';
+    result.textContent = '✅ ' + data.message + (details ? ' — ' + details : '');
+  } else {
+    result.style.color = 'var(--red)';
+    result.textContent = '❌ ' + data.error;
+  }
 }
 
 /* ── Charger les vraies données ── */
