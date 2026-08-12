@@ -1102,6 +1102,70 @@ async function loadLogs() {
   </tr>`).join('');
 }
 
+/* ── Paiements Stripe ── */
+async function loadPaiements() {
+  const tbody = document.getElementById('paiements-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/subscriptions');
+  if (!data) return;
+  if (!data.subscriptions?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun paiement.</td></tr>'; return; }
+  tbody.innerHTML = data.subscriptions.map(s => `<tr>
+    <td style="font-size:0.82rem;">${s.users?.email || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_price_id || '—'}</td>
+    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${s.status}</span></td>
+    <td style="font-size:0.82rem;">${s.current_period_end ? new Date(s.current_period_end).toLocaleDateString('fr-FR') : '—'}</td>
+  </tr>`).join('');
+}
+
+/* ── Remboursements ── */
+async function loadRemboursements() {
+  const tbody = document.getElementById('remboursements-tbody');
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/subscriptions');
+  if (!data) return;
+  const canceled = (data.subscriptions || []).filter(s => s.status === 'canceled');
+  if (!canceled.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun remboursement / annulation.</td></tr>'; return; }
+  tbody.innerHTML = canceled.map(s => `<tr>
+    <td style="font-size:0.82rem;">${s.users?.email || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
+    <td><span class="status-pill status-refund">${s.status}</span></td>
+    <td style="font-size:0.82rem;">${s.current_period_end ? new Date(s.current_period_end).toLocaleDateString('fr-FR') : '—'}</td>
+  </tr>`).join('');
+}
+
+/* ── Factures ── */
+async function loadFactures() {
+  const tbody = document.getElementById('factures-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/subscriptions');
+  if (!data) return;
+  if (!data.subscriptions?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune facture.</td></tr>'; return; }
+  tbody.innerHTML = data.subscriptions.map(s => `<tr>
+    <td style="font-size:0.82rem;">${s.users?.email || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
+    <td style="font-size:0.82rem;">29,90 €</td>
+    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${s.status}</span></td>
+    <td style="font-size:0.82rem;">${s.created_at ? new Date(s.created_at).toLocaleDateString('fr-FR') : '—'}</td>
+  </tr>`).join('');
+}
+
+/* ── Emails envoyés ── */
+async function loadEmails() {
+  const tbody = document.getElementById('emails-tbody');
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/notifications');
+  if (!data) return;
+  const emails = (data.notifications || []).filter(n => !n.channel || n.channel === 'email');
+  if (!emails.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun email envoyé.</td></tr>'; return; }
+  tbody.innerHTML = emails.map(n => `<tr>
+    <td style="font-size:0.82rem;">${n.users?.email || '—'}</td>
+    <td style="font-size:0.82rem;">${n.alerts?.prefecture || '—'}</td>
+    <td style="font-size:0.82rem;">${n.alerts?.demarche || '—'}</td>
+    <td style="font-size:0.82rem;">${new Date(n.sent_at).toLocaleString('fr-FR')}</td>
+  </tr>`).join('');
+}
+
 /* ── Panel switching ── */
 const ALL_PANELS = ['dashboard','revenus','abonnes','alertes','sms','robot','prefectures','logs','paiements','remboursements','factures','emails','blog','config'];
 
@@ -1120,10 +1184,14 @@ function showPanel(name) {
   if (name === 'alertes')  loadAlertes();
   if (name === 'sms')      loadSMS();
   if (name === 'robot')    loadRobot2();
-  if (name === 'revenus')     loadRevenus();
-  if (name === 'prefectures') loadPrefectures();
-  if (name === 'logs')        loadLogs();
-  if (['paiements','remboursements','factures','emails','config'].includes(name)) renderComingSoon(name);
+  if (name === 'revenus')        loadRevenus();
+  if (name === 'prefectures')    loadPrefectures();
+  if (name === 'logs')           loadLogs();
+  if (name === 'paiements')      loadPaiements();
+  if (name === 'remboursements') loadRemboursements();
+  if (name === 'factures')       loadFactures();
+  if (name === 'emails')         loadEmails();
+  if (name === 'config' && !document.getElementById('panel-config').innerHTML.trim()) renderComingSoon('config');
 }
 
 function renderComingSoon(name) {
