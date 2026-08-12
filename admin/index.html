@@ -690,14 +690,115 @@
   </div>
 
   <!-- ── Panels placeholder ── -->
-  <div id="panel-revenus" style="display:none;"></div>
-  <div id="panel-prefectures" style="display:none;"></div>
-  <div id="panel-logs" style="display:none;"></div>
-  <div id="panel-paiements" style="display:none;"></div>
-  <div id="panel-remboursements" style="display:none;"></div>
-  <div id="panel-factures" style="display:none;"></div>
-  <div id="panel-emails" style="display:none;"></div>
-  <div id="panel-config" style="display:none;"></div>
+  <!-- ── Revenus ── -->
+  <div id="panel-revenus" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Vue générale</div><div class="admin-page-title">Revenus</div></div><div class="admin-topbar-right"><button onclick="loadRevenus()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="kpi-grid" style="margin-bottom:24px;">
+      <div class="kpi-card"><div class="kpi-label">MRR estimé</div><div class="kpi-value" id="rev-mrr">—</div><div class="kpi-trend up" id="rev-mrr-sub">— abonnés actifs</div></div>
+      <div class="kpi-card"><div class="kpi-label">ARR estimé</div><div class="kpi-value" id="rev-arr">—</div><div class="kpi-trend flat">Revenus annuels projetés</div></div>
+      <div class="kpi-card"><div class="kpi-label">Abonnés actifs</div><div class="kpi-value" id="rev-subs">—</div><div class="kpi-trend flat">Formule INTÉGRALE 29,90 €/mois</div></div>
+      <div class="kpi-card"><div class="kpi-label">Utilisateurs inscrits</div><div class="kpi-value" id="rev-users">—</div><div class="kpi-trend flat">Total depuis le lancement</div></div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-header"><span class="admin-card-title">Abonnements actifs</span></div>
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Stripe Subscription ID</th><th>Statut</th><th>Fin de période</th></tr></thead>
+        <tbody id="revenus-tbody"><tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Préfectures ── -->
+  <div id="panel-prefectures" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Système</div><div class="admin-page-title">Préfectures</div></div><div class="admin-topbar-right"><button onclick="loadPrefectures()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <div class="admin-card-header"><span class="admin-card-title">Alertes par préfecture</span><span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">Classement par volume</span></div>
+      <div id="prefectures-list" style="padding:20px;display:flex;flex-direction:column;gap:10px;">Chargement…</div>
+    </div>
+  </div>
+
+  <!-- ── Logs ── -->
+  <div id="panel-logs" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Système</div><div class="admin-page-title">Logs & notifications</div></div><div class="admin-topbar-right"><button onclick="loadLogs()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Préfecture</th><th>Démarche</th><th>Canal</th><th>Date</th></tr></thead>
+        <tbody id="logs-tbody"><tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Paiements Stripe ── -->
+  <div id="panel-paiements" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Finances</div><div class="admin-page-title">Paiements Stripe</div></div><div class="admin-topbar-right"><button onclick="loadPaiements()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Subscription ID</th><th>Price ID</th><th>Statut</th><th>Fin période</th></tr></thead>
+        <tbody id="paiements-tbody"><tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Remboursements ── -->
+  <div id="panel-remboursements" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Finances</div><div class="admin-page-title">Remboursements</div></div><div class="admin-topbar-right"><button onclick="loadRemboursements()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Subscription ID</th><th>Statut</th><th>Fin période</th></tr></thead>
+        <tbody id="remboursements-tbody"><tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Factures ── -->
+  <div id="panel-factures" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Finances</div><div class="admin-page-title">Factures</div></div><div class="admin-topbar-right"><button onclick="loadFactures()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Subscription ID</th><th>Montant</th><th>Statut</th><th>Date début</th></tr></thead>
+        <tbody id="factures-tbody"><tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Emails ── -->
+  <div id="panel-emails" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Marketing</div><div class="admin-page-title">Emails envoyés</div></div><div class="admin-topbar-right"><button onclick="loadEmails()" class="btn btn-secondary btn-sm" style="background:transparent;border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:0.78rem;">Actualiser</button></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead><tr><th>Utilisateur</th><th>Préfecture</th><th>Démarche</th><th>Date</th></tr></thead>
+        <tbody id="emails-tbody"><tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Configuration ── -->
+  <div id="panel-config" style="display:none;">
+    <div class="admin-topbar"><div><div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">Paramètres</div><div class="admin-page-title">Configuration</div></div></div>
+    <div class="admin-card" style="margin-bottom:24px;">
+      <div class="admin-card-header"><span class="admin-card-title">État des services</span></div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">🤖 Robot (node-cron)</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Scan toutes les 45 secondes</div></div><span class="status-pill status-active">Actif</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">📧 SendGrid</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Alertes + bienvenue + reset mot de passe</div></div><span class="status-pill status-active">Actif</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">📱 Brevo SMS</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Alertes SMS transactionnelles</div></div><span class="status-pill status-active">Actif</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">💳 Stripe</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Mode LIVE — Checkout + Webhooks + Portal</div></div><span class="status-pill status-active">Actif</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">🗄️ Supabase</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">PostgreSQL — RLS activé sur toutes les tables</div></div><span class="status-pill status-active">Actif</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">📝 Blog IA (Anthropic)</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">3 articles/sem. (phase 1) → 1/sem. (phase 2 après 3 mois)</div></div><span class="status-pill status-active">Actif</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">🚀 Railway (backend)</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">Node 20 + Playwright — Europe ouest</div></div><span class="status-pill status-active">Actif</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);"><div><div style="font-size:0.85rem;font-weight:600;color:#fff;">🌐 Vercel (frontend)</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);">rdvprefecturefacile.fr — CDN mondial</div></div><span class="status-pill status-active">Actif</span></div>
+      </div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-header"><span class="admin-card-title">Informations techniques</span></div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:10px;font-size:0.82rem;color:rgba(255,255,255,0.6);">
+        <div style="display:flex;justify-content:space-between;"><span>Backend URL</span><span style="color:#93C5FD;">rdvprefecturefacile-backend-production.up.railway.app</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Frontend URL</span><span style="color:#93C5FD;">www.rdvprefecturefacile.fr</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Blog start date</span><span style="color:#fff;">2026-05-21</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Prix abonnement</span><span style="color:#fff;">29,90 € / mois</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Intervalle scan</span><span style="color:#fff;">45 secondes</span></div>
+      </div>
+    </div>
+  </div>
 
 </main>
 
@@ -926,6 +1027,40 @@ async function loadDashboard() {
   }
 }
 
+/* ── Revenus ── */
+async function loadRevenus() {
+  const tbody = document.getElementById('revenus-tbody');
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr>';
+
+  const [stats, subsData] = await Promise.all([
+    adminFetch('/api/admin/stats'),
+    adminFetch('/api/admin/subscriptions')
+  ]);
+  if (!stats || !subsData) return;
+
+  const PRICE = 29.90;
+  const subs = subsData.subscriptions || [];
+  const activeSubs = subs.filter(s => s.status === 'active');
+  const mrr = activeSubs.length * PRICE;
+
+  document.getElementById('rev-mrr').textContent = mrr.toLocaleString('fr-FR', {style:'currency', currency:'EUR'});
+  document.getElementById('rev-mrr-sub').textContent = `${activeSubs.length} abonné${activeSubs.length > 1 ? 's' : ''} actif${activeSubs.length > 1 ? 's' : ''}`;
+  document.getElementById('rev-arr').textContent = (mrr * 12).toLocaleString('fr-FR', {style:'currency', currency:'EUR'});
+  document.getElementById('rev-subs').textContent = activeSubs.length;
+  document.getElementById('rev-users').textContent = stats.totalUsers ?? '—';
+
+  if (!subs.length) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun abonnement.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = subs.map(s => `<tr>
+    <td>${s.users?.email || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
+    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${s.status}</span></td>
+    <td style="font-size:0.82rem;">${s.current_period_end ? new Date(s.current_period_end).toLocaleDateString('fr-FR') : '—'}</td>
+  </tr>`).join('');
+}
+
 /* ── Panel switching ── */
 const ALL_PANELS = ['dashboard','revenus','abonnes','alertes','sms','robot','prefectures','logs','paiements','remboursements','factures','emails','blog','config'];
 
@@ -944,7 +1079,8 @@ function showPanel(name) {
   if (name === 'alertes')  loadAlertes();
   if (name === 'sms')      loadSMS();
   if (name === 'robot')    loadRobot2();
-  if (['revenus','prefectures','logs','paiements','remboursements','factures','emails','config'].includes(name)) renderComingSoon(name);
+  if (name === 'revenus')  loadRevenus();
+  if (['prefectures','logs','paiements','remboursements','factures','emails','config'].includes(name)) renderComingSoon(name);
 }
 
 function renderComingSoon(name) {
