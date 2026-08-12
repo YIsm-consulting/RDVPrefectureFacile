@@ -1061,6 +1061,47 @@ async function loadRevenus() {
   </tr>`).join('');
 }
 
+/* ── Préfectures ── */
+async function loadPrefectures() {
+  const list = document.getElementById('prefectures-list');
+  list.innerHTML = 'Chargement…';
+  const data = await adminFetch('/api/admin/alerts');
+  if (!data) return;
+  if (!data.alerts?.length) { list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:24px;">Aucune alerte.</div>'; return; }
+
+  const counts = {};
+  data.alerts.forEach(a => { counts[a.prefecture] = (counts[a.prefecture] || 0) + 1; });
+  const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const max = ranked[0][1];
+
+  list.innerHTML = ranked.map(([prefecture, count]) => `
+    <div>
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px;">
+        <span style="color:var(--white);font-weight:600;">${prefecture}</span>
+        <span style="color:rgba(255,255,255,0.4);">${count} alerte${count > 1 ? 's' : ''}</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:6px;height:8px;overflow:hidden;">
+        <div style="background:#1B4FD8;height:100%;width:${(count / max * 100).toFixed(0)}%;"></div>
+      </div>
+    </div>`).join('');
+}
+
+/* ── Logs & notifications ── */
+async function loadLogs() {
+  const tbody = document.getElementById('logs-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Chargement…</td></tr>';
+  const data = await adminFetch('/api/admin/notifications');
+  if (!data) return;
+  if (!data.notifications?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune notification.</td></tr>'; return; }
+  tbody.innerHTML = data.notifications.map(n => `<tr>
+    <td style="font-size:0.82rem;">${n.users?.email || '—'}</td>
+    <td style="font-size:0.82rem;">${n.alerts?.prefecture || '—'}</td>
+    <td style="font-size:0.82rem;">${n.alerts?.demarche || '—'}</td>
+    <td><span class="status-pill status-active" style="font-size:0.72rem;">${n.channel || 'email'}</span></td>
+    <td style="font-size:0.82rem;">${new Date(n.sent_at).toLocaleString('fr-FR')}</td>
+  </tr>`).join('');
+}
+
 /* ── Panel switching ── */
 const ALL_PANELS = ['dashboard','revenus','abonnes','alertes','sms','robot','prefectures','logs','paiements','remboursements','factures','emails','blog','config'];
 
@@ -1079,8 +1120,10 @@ function showPanel(name) {
   if (name === 'alertes')  loadAlertes();
   if (name === 'sms')      loadSMS();
   if (name === 'robot')    loadRobot2();
-  if (name === 'revenus')  loadRevenus();
-  if (['prefectures','logs','paiements','remboursements','factures','emails','config'].includes(name)) renderComingSoon(name);
+  if (name === 'revenus')     loadRevenus();
+  if (name === 'prefectures') loadPrefectures();
+  if (name === 'logs')        loadLogs();
+  if (['paiements','remboursements','factures','emails','config'].includes(name)) renderComingSoon(name);
 }
 
 function renderComingSoon(name) {
