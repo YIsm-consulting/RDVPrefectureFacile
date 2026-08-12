@@ -3,7 +3,8 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/blog", "destination": "/blog/index.html" },
-    { "source": "/admin", "destination": "/admin/index.html" }
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" }
   ],
   "headers": [
     {
