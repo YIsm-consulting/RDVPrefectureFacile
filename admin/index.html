@@ -1299,7 +1299,7 @@ async function loadBlogPosts() {
     const pubBtn  = p.status === 'published'
       ? `<button onclick="togglePublish('${p.id}','draft')" class="btn btn-ghost btn-sm" style="color:#FBBF24;font-size:0.75rem;padding:4px 10px;">Dépublier</button>`
       : `<button onclick="togglePublish('${p.id}','published')" class="btn btn-ghost btn-sm" style="color:#34D399;font-size:0.75px;padding:4px 10px;font-size:0.75rem;">Publier</button>`;
-    const previewUrl = `https://www.rdvprefecturefacile.fr/blog/article.html?slug=${p.slug}`;
+    const previewUrl = `https://www.rdvprefecturefacile.fr/blog/${p.slug}.html`;
     return `<tr>
       <td>
         <div style="font-weight:600;color:var(--white);max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.title}</div>
