@@ -327,10 +327,11 @@
         <p style="text-align:center;color:var(--gray-500);padding:24px 0;">Aucune alerte configurée.</p>`;
     } else {
       const a = alerts[0];
+      const esc = s => (s === null || s === undefined) ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
       alertCard.querySelector('.alert-info-grid').innerHTML = `
-        <div class="alert-info-item"><div class="alert-info-label">Préfecture</div><div class="alert-info-value">${a.prefecture}</div></div>
-        <div class="alert-info-item"><div class="alert-info-label">Démarche</div><div class="alert-info-value">${a.demarche}</div></div>
-        <div class="alert-info-item"><div class="alert-info-label">Canal Email</div><div class="alert-info-value">${user.email}</div></div>
+        <div class="alert-info-item"><div class="alert-info-label">Préfecture</div><div class="alert-info-value">${esc(a.prefecture)}</div></div>
+        <div class="alert-info-item"><div class="alert-info-label">Démarche</div><div class="alert-info-value">${esc(a.demarche)}</div></div>
+        <div class="alert-info-item"><div class="alert-info-label">Canal Email</div><div class="alert-info-value">${esc(user.email)}</div></div>
         <div class="alert-info-item"><div class="alert-info-label">Statut</div><div class="alert-info-value">${a.active ? 'Active' : 'Inactive'}</div></div>`;
 
       alertCard.querySelector('button[style*="red"]').addEventListener('click', async () => {

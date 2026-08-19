@@ -796,6 +796,19 @@
 <script>
 const API = 'https://rdvprefecturefacile-backend-production.up.railway.app';
 
+/* Toute donnée affichée ici (nom, email, préfecture, démarche…) vient d'un
+   utilisateur qui s'est simplement inscrit sur le site public — jamais de
+   confiance aveugle avant injection dans le HTML du panel admin. */
+function esc(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function getAdminToken() { return localStorage.getItem('rdv_admin_token'); }
 function setAdminToken(t) { localStorage.setItem('rdv_admin_token', t); }
 function adminLogout() { localStorage.removeItem('rdv_admin_token'); location.reload(); }
@@ -919,7 +932,7 @@ async function createTestData() {
     creds.style.display = 'block';
     result.style.display = 'none';
     document.getElementById('test-user-actions').innerHTML = `
-      <button onclick="document.getElementById('notif-user-id').value='${data.userId}'" class="btn btn-secondary btn-sm" style="font-size:0.75rem;background:rgba(27,79,216,0.2);border-color:rgba(27,79,216,0.3);color:#93C5FD;">Utiliser pour test notif</button>`;
+      <button onclick="document.getElementById('notif-user-id').value='${esc(data.userId)}'" class="btn btn-secondary btn-sm" style="font-size:0.75rem;background:rgba(27,79,216,0.2);border-color:rgba(27,79,216,0.3);color:#93C5FD;">Utiliser pour test notif</button>`;
   } else {
     result.style.display = 'block';
     result.style.cssText = 'margin-top:12px;color:var(--red);font-size:0.82rem;';
@@ -989,15 +1002,15 @@ async function loadDashboard() {
     tbody.innerHTML = usersData.users.slice(0, 10).map(u => `
       <tr>
         <td>
-          <div style="font-weight:600;color:var(--white);">${u.first_name || ''} ${u.last_name || ''}</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${u.email}</div>
+          <div style="font-weight:600;color:var(--white);">${esc(u.first_name)} ${esc(u.last_name)}</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(u.email)}</div>
         </td>
         <td>—</td>
         <td>—</td>
         <td>${new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
         <td><span class="status-pill ${u.stripe_customer_id ? 'status-active' : 'status-pending'}">${u.stripe_customer_id ? 'Abonné' : 'Inscrit'}</span></td>
         <td>—</td>
-        <td><span style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${u.role}</span></td>
+        <td><span style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(u.role)}</span></td>
       </tr>`).join('');
   } else {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun utilisateur</td></tr>';
@@ -1045,9 +1058,9 @@ async function loadRevenus() {
     return;
   }
   tbody.innerHTML = subs.map(s => `<tr>
-    <td>${s.users?.email || '—'}</td>
-    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
-    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${s.status}</span></td>
+    <td>${esc(s.users?.email) || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(s.stripe_subscription_id)}</td>
+    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${esc(s.status)}</span></td>
     <td style="font-size:0.82rem;">${s.current_period_end ? new Date(s.current_period_end).toLocaleDateString('fr-FR') : '—'}</td>
   </tr>`).join('');
 }
@@ -1068,7 +1081,7 @@ async function loadPrefectures() {
   list.innerHTML = ranked.map(([prefecture, count]) => `
     <div>
       <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px;">
-        <span style="color:var(--white);font-weight:600;">${prefecture}</span>
+        <span style="color:var(--white);font-weight:600;">${esc(prefecture)}</span>
         <span style="color:rgba(255,255,255,0.4);">${count} alerte${count > 1 ? 's' : ''}</span>
       </div>
       <div style="background:rgba(255,255,255,0.06);border-radius:6px;height:8px;overflow:hidden;">
@@ -1085,10 +1098,10 @@ async function loadLogs() {
   if (!data) return;
   if (!data.notifications?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune notification.</td></tr>'; return; }
   tbody.innerHTML = data.notifications.map(n => `<tr>
-    <td style="font-size:0.82rem;">${n.users?.email || '—'}</td>
-    <td style="font-size:0.82rem;">${n.alerts?.prefecture || '—'}</td>
-    <td style="font-size:0.82rem;">${n.alerts?.demarche || '—'}</td>
-    <td><span class="status-pill status-active" style="font-size:0.72rem;">${n.channel || 'email'}</span></td>
+    <td style="font-size:0.82rem;">${esc(n.users?.email) || '—'}</td>
+    <td style="font-size:0.82rem;">${esc(n.alerts?.prefecture) || '—'}</td>
+    <td style="font-size:0.82rem;">${esc(n.alerts?.demarche) || '—'}</td>
+    <td><span class="status-pill status-active" style="font-size:0.72rem;">${esc(n.channel) || 'email'}</span></td>
     <td style="font-size:0.82rem;">${new Date(n.sent_at).toLocaleString('fr-FR')}</td>
   </tr>`).join('');
 }
@@ -1101,10 +1114,10 @@ async function loadPaiements() {
   if (!data) return;
   if (!data.subscriptions?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun paiement.</td></tr>'; return; }
   tbody.innerHTML = data.subscriptions.map(s => `<tr>
-    <td style="font-size:0.82rem;">${s.users?.email || '—'}</td>
-    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
-    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_price_id || '—'}</td>
-    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${s.status}</span></td>
+    <td style="font-size:0.82rem;">${esc(s.users?.email) || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(s.stripe_subscription_id)}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(s.stripe_price_id) || '—'}</td>
+    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${esc(s.status)}</span></td>
     <td style="font-size:0.82rem;">${s.current_period_end ? new Date(s.current_period_end).toLocaleDateString('fr-FR') : '—'}</td>
   </tr>`).join('');
 }
@@ -1118,9 +1131,9 @@ async function loadRemboursements() {
   const canceled = (data.subscriptions || []).filter(s => s.status === 'canceled');
   if (!canceled.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun remboursement / annulation.</td></tr>'; return; }
   tbody.innerHTML = canceled.map(s => `<tr>
-    <td style="font-size:0.82rem;">${s.users?.email || '—'}</td>
-    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
-    <td><span class="status-pill status-refund">${s.status}</span></td>
+    <td style="font-size:0.82rem;">${esc(s.users?.email) || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(s.stripe_subscription_id)}</td>
+    <td><span class="status-pill status-refund">${esc(s.status)}</span></td>
     <td style="font-size:0.82rem;">${s.current_period_end ? new Date(s.current_period_end).toLocaleDateString('fr-FR') : '—'}</td>
   </tr>`).join('');
 }
@@ -1133,10 +1146,10 @@ async function loadFactures() {
   if (!data) return;
   if (!data.subscriptions?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune facture.</td></tr>'; return; }
   tbody.innerHTML = data.subscriptions.map(s => `<tr>
-    <td style="font-size:0.82rem;">${s.users?.email || '—'}</td>
-    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${s.stripe_subscription_id}</td>
+    <td style="font-size:0.82rem;">${esc(s.users?.email) || '—'}</td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(s.stripe_subscription_id)}</td>
     <td style="font-size:0.82rem;">29,90 €</td>
-    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${s.status}</span></td>
+    <td><span class="status-pill ${s.status === 'active' ? 'status-active' : 'status-refund'}">${esc(s.status)}</span></td>
     <td style="font-size:0.82rem;">${s.created_at ? new Date(s.created_at).toLocaleDateString('fr-FR') : '—'}</td>
   </tr>`).join('');
 }
@@ -1150,9 +1163,9 @@ async function loadEmails() {
   const emails = (data.notifications || []).filter(n => !n.channel || n.channel === 'email');
   if (!emails.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun email envoyé.</td></tr>'; return; }
   tbody.innerHTML = emails.map(n => `<tr>
-    <td style="font-size:0.82rem;">${n.users?.email || '—'}</td>
-    <td style="font-size:0.82rem;">${n.alerts?.prefecture || '—'}</td>
-    <td style="font-size:0.82rem;">${n.alerts?.demarche || '—'}</td>
+    <td style="font-size:0.82rem;">${esc(n.users?.email) || '—'}</td>
+    <td style="font-size:0.82rem;">${esc(n.alerts?.prefecture) || '—'}</td>
+    <td style="font-size:0.82rem;">${esc(n.alerts?.demarche) || '—'}</td>
     <td style="font-size:0.82rem;">${new Date(n.sent_at).toLocaleString('fr-FR')}</td>
   </tr>`).join('');
 }
@@ -1208,13 +1221,13 @@ async function loadAbonnes() {
   if (!data) return;
   if (!data.users?.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucun utilisateur.</td></tr>'; return; }
   tbody.innerHTML = data.users.map(u => `<tr>
-    <td><div style="font-weight:600;color:var(--white);">${u.first_name||''} ${u.last_name||''}</div></td>
-    <td style="font-size:0.82rem;">${u.email}</td>
-    <td style="font-size:0.82rem;">${u.phone||'—'}</td>
-    <td><span class="status-pill ${u.role==='admin'?'status-active':'status-pending'}">${u.role}</span></td>
+    <td><div style="font-weight:600;color:var(--white);">${esc(u.first_name)} ${esc(u.last_name)}</div></td>
+    <td style="font-size:0.82rem;">${esc(u.email)}</td>
+    <td style="font-size:0.82rem;">${esc(u.phone)||'—'}</td>
+    <td><span class="status-pill ${u.role==='admin'?'status-active':'status-pending'}">${esc(u.role)}</span></td>
     <td style="font-size:0.82rem;">${new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
-    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${u.stripe_customer_id||'—'}</td>
-    <td><button onclick="if(confirm('Supprimer cet utilisateur ?')) deleteUser('${u.id}')" class="btn btn-ghost btn-sm" style="color:#F87171;font-size:0.75rem;padding:4px 10px;">Supprimer</button></td>
+    <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${esc(u.stripe_customer_id)||'—'}</td>
+    <td><button onclick="if(confirm('Supprimer cet utilisateur ?')) deleteUser('${esc(u.id)}')" class="btn btn-ghost btn-sm" style="color:#F87171;font-size:0.75rem;padding:4px 10px;">Supprimer</button></td>
   </tr>`).join('');
 }
 
@@ -1231,12 +1244,12 @@ async function loadAlertes() {
   if (!data) return;
   if (!data.alerts?.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune alerte.</td></tr>'; return; }
   tbody.innerHTML = data.alerts.map(a => `<tr>
-    <td style="font-size:0.82rem;">${a.users?.email||'—'}</td>
-    <td>${a.prefecture}</td>
-    <td style="font-size:0.82rem;">${a.demarche}</td>
+    <td style="font-size:0.82rem;">${esc(a.users?.email)||'—'}</td>
+    <td>${esc(a.prefecture)}</td>
+    <td style="font-size:0.82rem;">${esc(a.demarche)}</td>
     <td style="font-size:0.82rem;">${new Date(a.created_at).toLocaleDateString('fr-FR')}</td>
     <td><span class="status-pill ${a.active?'status-active':'status-refund'}">${a.active?'Active':'Inactive'}</span></td>
-    <td><button onclick="if(confirm('Désactiver cette alerte ?')) deactivateAlert('${a.id}')" class="btn btn-ghost btn-sm" style="color:#FBBF24;font-size:0.75rem;padding:4px 10px;">Désactiver</button></td>
+    <td><button onclick="if(confirm('Désactiver cette alerte ?')) deactivateAlert('${esc(a.id)}')" class="btn btn-ghost btn-sm" style="color:#FBBF24;font-size:0.75rem;padding:4px 10px;">Désactiver</button></td>
   </tr>`).join('');
 }
 
@@ -1253,10 +1266,10 @@ async function loadSMS() {
   if (!data) return;
   if (!data.notifications?.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">Aucune notification.</td></tr>'; return; }
   tbody.innerHTML = data.notifications.map(n => `<tr>
-    <td style="font-size:0.82rem;">${n.users?.email||'—'}</td>
-    <td style="font-size:0.82rem;">${n.alerts?.prefecture||'—'}</td>
-    <td style="font-size:0.82rem;">${n.alerts?.demarche||'—'}</td>
-    <td><span class="status-pill status-active" style="font-size:0.72rem;">${n.channel||'email'}</span></td>
+    <td style="font-size:0.82rem;">${esc(n.users?.email)||'—'}</td>
+    <td style="font-size:0.82rem;">${esc(n.alerts?.prefecture)||'—'}</td>
+    <td style="font-size:0.82rem;">${esc(n.alerts?.demarche)||'—'}</td>
+    <td><span class="status-pill status-active" style="font-size:0.72rem;">${esc(n.channel)||'email'}</span></td>
     <td style="font-size:0.82rem;">${new Date(n.sent_at).toLocaleString('fr-FR')}</td>
   </tr>`).join('');
 }
@@ -1297,22 +1310,22 @@ async function loadBlogPosts() {
   tbody.innerHTML = data.posts.map(p => {
     const date    = new Date(p.created_at).toLocaleDateString('fr-FR');
     const pubBtn  = p.status === 'published'
-      ? `<button onclick="togglePublish('${p.id}','draft')" class="btn btn-ghost btn-sm" style="color:#FBBF24;font-size:0.75rem;padding:4px 10px;">Dépublier</button>`
-      : `<button onclick="togglePublish('${p.id}','published')" class="btn btn-ghost btn-sm" style="color:#34D399;font-size:0.75px;padding:4px 10px;font-size:0.75rem;">Publier</button>`;
-    const previewUrl = `https://www.rdvprefecturefacile.fr/blog/${p.slug}.html`;
+      ? `<button onclick="togglePublish('${esc(p.id)}','draft')" class="btn btn-ghost btn-sm" style="color:#FBBF24;font-size:0.75rem;padding:4px 10px;">Dépublier</button>`
+      : `<button onclick="togglePublish('${esc(p.id)}','published')" class="btn btn-ghost btn-sm" style="color:#34D399;font-size:0.75px;padding:4px 10px;font-size:0.75rem;">Publier</button>`;
+    const previewUrl = `https://www.rdvprefecturefacile.fr/blog/${encodeURIComponent(p.slug)}.html`;
     return `<tr>
       <td>
-        <div style="font-weight:600;color:var(--white);max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.title}</div>
-        <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);">${p.slug}</div>
+        <div style="font-weight:600;color:var(--white);max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.title)}</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);">${esc(p.slug)}</div>
       </td>
-      <td style="font-size:0.82rem;">${p.category}</td>
+      <td style="font-size:0.82rem;">${esc(p.category)}</td>
       <td><span class="status-pill ${p.status === 'published' ? 'status-active' : 'status-pending'}">${p.status === 'published' ? 'Publié' : 'Brouillon'}</span></td>
       <td style="font-size:0.82rem;">${date}</td>
       <td style="font-size:0.82rem;">${p.reading_time} min</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap;">
         ${pubBtn}
         <a href="${previewUrl}" target="_blank" class="btn btn-ghost btn-sm" style="color:#60A5FA;font-size:0.75rem;padding:4px 10px;">Voir</a>
-        <button onclick="deletePost('${p.id}')" class="btn btn-ghost btn-sm" style="color:#F87171;font-size:0.75rem;padding:4px 10px;">Supprimer</button>
+        <button onclick="deletePost('${esc(p.id)}')" class="btn btn-ghost btn-sm" style="color:#F87171;font-size:0.75rem;padding:4px 10px;">Supprimer</button>
       </td>
     </tr>`;
   }).join('');
@@ -1343,7 +1356,7 @@ async function generateArticle() {
 
   if (res.ok) {
     result.style.color = 'var(--green)';
-    result.innerHTML   = `✅ Article "<strong style="color:#fff;">${data.post.title}</strong>" créé en brouillon. <a href="https://www.rdvprefecturefacile.fr/blog/article.html?slug=${data.post.slug}" target="_blank" style="color:#60A5FA;">Aperçu →</a>`;
+    result.innerHTML   = `✅ Article "<strong style="color:#fff;">${esc(data.post.title)}</strong>" créé en brouillon. <a href="https://www.rdvprefecturefacile.fr/blog/article.html?slug=${encodeURIComponent(data.post.slug)}" target="_blank" style="color:#60A5FA;">Aperçu →</a>`;
     document.getElementById('blog-topic').value = '';
     loadBlogPosts();
   } else {
