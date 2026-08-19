@@ -365,6 +365,11 @@ const EMOJIS   = ['📄','🏛️','🇫🇷','📋','⚡','🪪','🎓','🔄',
 
 function emoji() { return EMOJIS[Math.floor(Math.random() * EMOJIS.length)]; }
 
+function esc(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 function fmtDate(d) {
   return new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' });
 }
@@ -381,12 +386,12 @@ async function loadAIArticles() {
       <div class="blog-card">
         <div class="blog-img">${emoji()}</div>
         <div class="blog-content">
-          <div class="blog-cat">${p.category}</div>
-          <h3 class="blog-title">${p.title}</h3>
-          <p class="blog-excerpt">${p.excerpt}</p>
+          <div class="blog-cat">${esc(p.category)}</div>
+          <h3 class="blog-title">${esc(p.title)}</h3>
+          <p class="blog-excerpt">${esc(p.excerpt)}</p>
           <div class="blog-meta">
             <span>${fmtDate(p.published_at)} · ${p.reading_time} min</span>
-            <a href="${p.slug}.html" class="blog-read-more">Lire →</a>
+            <a href="${encodeURIComponent(p.slug)}.html" class="blog-read-more">Lire →</a>
           </div>
         </div>
       </div>`).join('');
