@@ -5,5 +5,37 @@ Disallow: /paiement.html
 Disallow: /admin/
 Disallow: /connexion.html
 
+# Robots d'entraînement des IA (liste synchronisée avec middleware.js, maj 2026-10-19).
+# Google-Extended / Applebot-Extended : refus de l'entraînement IA, sans effet sur le référencement.
+# Moteurs de recherche, recherche IA (OAI-SearchBot, Claude-SearchBot, PerplexityBot) et
+# consultation à la demande (ChatGPT-User, Claude-User) restent autorisés.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: CCBot
+User-agent: Meta-ExternalAgent
+User-agent: FacebookBot
+User-agent: Bytespider
+User-agent: TikTokSpider
+User-agent: Amazonbot
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: Diffbot
+User-agent: omgili
+User-agent: webzio-extended
+User-agent: ImagesiftBot
+User-agent: img2dataset
+User-agent: AI2Bot
+User-agent: PanguBot
+User-agent: Timpibot
+User-agent: FriendlyCrawler
+User-agent: VelenPublicWebCrawler
+User-agent: ICC-Crawler
+User-agent: FirecrawlAgent
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Disallow: /
+
 Sitemap: https://rdvprefecturefacile.fr/sitemap.xml
 Host: https://rdvprefecturefacile.fr
