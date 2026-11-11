@@ -114,15 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* --- Formulaire d'inscription --- */
-  const inscriptionForm = document.getElementById('inscription-form');
-  if (inscriptionForm) {
-    inscriptionForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      window.location.href = 'paiement.html';
-    });
-  }
-
   /* --- Smooth scroll pour les ancres --- */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {

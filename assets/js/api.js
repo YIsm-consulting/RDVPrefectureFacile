@@ -44,10 +44,10 @@ async function apiFetch(path, options = {}) {
 }
 
 /* ── Auth ── */
-async function register({ email, password, first_name, last_name, phone }) {
+async function register({ email, password, first_name, last_name, phone, altcha }) {
   const data = await apiFetch('/api/auth/register', {
     method: 'POST',
-    body: JSON.stringify({ email, password, first_name, last_name, phone })
+    body: JSON.stringify({ email, password, first_name, last_name, phone, altcha })
   });
   setToken(data.token);
   setUser(data.user);
