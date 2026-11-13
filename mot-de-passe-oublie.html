@@ -49,7 +49,7 @@
           <label class="form-label" for="email">Email</label>
           <input class="form-input" type="email" id="email" placeholder="votre@email.fr" required>
         </div>
-        <altcha-widget challenge="https://rdvprefecturefacile-backend-production.up.railway.app/api/altcha" name="altcha" auto="onfocus" language="fr-fr"
+        <altcha-widget challenge="/api/altcha" name="altcha" auto="onfocus" language="fr-fr"
           style="--altcha-max-width:100%;--altcha-border-radius:10px;--altcha-color-primary:#1B4FD8;--altcha-color-success:#0FA47A;--altcha-spinner-color:#1B4FD8;display:block;margin:20px 0 4px;"></altcha-widget>
         <button type="submit" class="btn btn-primary form-submit btn-lg">Envoyer le lien de réinitialisation</button>
       </form>
@@ -63,7 +63,7 @@
 <script type="module" src="assets/js/vendor/altcha-3.5.0.min.js"></script>
 <script type="module" src="assets/js/vendor/altcha-fr-3.5.0.js"></script>
 <script src="assets/js/altcha-form.js" defer></script>
-<script src="assets/js/api.js"></script>
+<script src="assets/js/api-2.js"></script>
 <script>
   document.getElementById('forgot-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -74,7 +74,7 @@
     if (errEl) errEl.remove();
 
     try {
-      const res = await fetch('https://rdvprefecturefacile-backend-production.up.railway.app/api/auth/forgot-password', {
+      const res = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

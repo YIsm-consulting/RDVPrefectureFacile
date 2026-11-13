@@ -2,7 +2,7 @@
    RDVPrefectureFacile — Client API
    ============================================================ */
 
-const API_URL = 'https://rdvprefecturefacile-backend-production.up.railway.app';
+const API_URL = '';
 
 function getToken() {
   return localStorage.getItem('rdv_token');

@@ -212,7 +212,7 @@
           <span style="font-size:0.82rem;color:var(--gray-700);">J'accepte les <a href="cgv.html" style="color:var(--blue);">CGV</a> et la <a href="politique-confidentialite.html" style="color:var(--blue);">politique de confidentialité</a></span>
         </label>
 
-        <altcha-widget challenge="https://rdvprefecturefacile-backend-production.up.railway.app/api/altcha" name="altcha" auto="onfocus" language="fr-fr"
+        <altcha-widget challenge="/api/altcha" name="altcha" auto="onfocus" language="fr-fr"
           style="--altcha-max-width:100%;--altcha-border-radius:10px;--altcha-color-primary:#1B4FD8;--altcha-color-success:#0FA47A;--altcha-spinner-color:#1B4FD8;display:block;margin:20px 0 4px;"></altcha-widget>
         <button type="submit" class="btn btn-primary form-submit btn-lg">Créer mon compte → Paiement sécurisé</button>
       </form>
@@ -232,7 +232,7 @@
 <script type="module" src="assets/js/vendor/altcha-3.5.0.min.js"></script>
 <script type="module" src="assets/js/vendor/altcha-fr-3.5.0.js"></script>
 <script src="assets/js/altcha-form.js" defer></script>
-<script src="assets/js/api.js"></script>
+<script src="assets/js/api-2.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
   document.getElementById('inscription-form').addEventListener('submit', async (e) => {
